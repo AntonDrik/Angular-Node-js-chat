@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true}));
 app.use('/api', routes.messages);
 app.use(express.static(__dirname + '/dist/chat'));
 
-app.get('/', function(req,res) {
+app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
