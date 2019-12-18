@@ -24,6 +24,10 @@ app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
+app.listen(port, () => {
+  console.log('Server started at port: '+ port);
+});
+
 mongoose.connect(
     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
     {
@@ -31,9 +35,6 @@ mongoose.connect(
         useUnifiedTopology: true
     })
     .then((res) => {
-        server.listen(port, () => {
-            console.log('Server started at port: '+ port);
-        });
 
         io.on('connection', (socket) => {
             console.log('Client connected');
