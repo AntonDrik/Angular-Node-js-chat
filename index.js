@@ -5,7 +5,7 @@ const cors              = require('cors');
 const routes            = require('./routes');
 let http                = require('http');
 let socketIO            = require('socket.io');
-const Message           = require('./models/message');
+// const Message           = require('./models/message');
 const path              = require('path');
 
 const port = process.env.PORT || 8080;
