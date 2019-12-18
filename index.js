@@ -10,7 +10,7 @@ const path              = require('path');
 
 const port = process.env.PORT || 8080;
 const app = express();
-let server = http.Server(app);
+let server = http.createServer(app);
 let io = socketIO(server);
 
 app.use(cors());
@@ -19,12 +19,8 @@ app.use(express.urlencoded({ extended: true}));
 app.use('/api', routes.messages);
 app.use(express.static(__dirname + '/dist/chat'));
 
-app.get('/*', function(req,res) {
+app.get('/', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
-});
-
-server.listen(port, () => {
-  console.log('Server started at port: '+ port);
 });
 
 io.on('connection', (socket) => {
@@ -46,14 +42,18 @@ io.on('connection', (socket) => {
   });
 });
 
-mongoose.connect(
-    'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then((res) => {
+server.listen(port, () => {
+  console.log('Server started at port: '+ port);
+});
 
-    })
-    .catch((e) => console.log(e));
+// mongoose.connect(
+//     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
+//     {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true
+//     })
+//     .then((res) => {
+//
+//     })
+//     .catch((e) => console.log(e));
 
