@@ -24,7 +24,7 @@ app.get('/', function(req,res) {
 });
 
 mongoose.connect(
-    'mongodb://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
+    'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
