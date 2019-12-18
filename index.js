@@ -23,7 +23,8 @@ app.get('/', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
-mongoose.connect('mongodb://localhost/chat',
+mongoose.connect(
+    'mongodb://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
