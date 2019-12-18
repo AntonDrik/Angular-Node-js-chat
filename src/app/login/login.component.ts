@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   @Input() isAdminPanel: boolean = false;
 
   loginForm: FormGroup;
-  private isWrongCred:boolean = false;
+  isWrongCred:boolean = false;
   constructor(private router: Router, private fb: FormBuilder, private authService: AuthService) { }
 
   ngOnInit() {

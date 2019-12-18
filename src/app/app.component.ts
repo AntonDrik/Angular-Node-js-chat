@@ -16,8 +16,8 @@ export class AppComponent implements  OnInit{
   @ViewChild('mbox', {static: false}) private mbox: ElementRef;
 
   title = 'BrusChat';
-  private login:boolean = false;
-  private nick:string = "";
+  login:boolean = false;
+  nick:string = "";
   chatForm: FormGroup;
   messages: Message[] = [];
   disableScrollDown = false;
