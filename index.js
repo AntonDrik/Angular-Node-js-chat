@@ -8,7 +8,6 @@ let socketIO            = require('socket.io');
 const Message           = require('./models/message');
 const path              = require('path');
 
-
 const port = process.env.PORT || 8080;
 const app = express();
 let server = http.Server(app);
@@ -24,7 +23,7 @@ app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log('Server started at port: '+ port);
 });
 
