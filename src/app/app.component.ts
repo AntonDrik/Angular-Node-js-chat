@@ -67,7 +67,7 @@ export class AppComponent implements  OnInit{
   }
 
   loadMessages(){
-    this.http.get('http://localhost:3000/api/messages').subscribe((data:[]) => {
+    this.http.get('http://localhost:8080/api/messages').subscribe((data:[]) => {
       this.messages = data.reverse();
       this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
     });

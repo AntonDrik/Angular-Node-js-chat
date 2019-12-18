@@ -9,7 +9,7 @@ import {Message} from "../interfaces/message";
 export class WebSocketService {
 
   private socket: any;
-  readonly SERVER_URL: string = 'ws://localhost:3000';
+  readonly SERVER_URL: string = 'ws://localhost:8080';
 
   constructor() {}
 
