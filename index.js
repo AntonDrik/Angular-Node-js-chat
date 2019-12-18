@@ -23,37 +23,35 @@ app.get('/', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
-io.on('connection', (socket) => {
-  console.log('Client connected');
-  socket.on('message', (data) => {
-    console.log('[server](message): %s', JSON.stringify(data));
-    // if (!data.action) {
-    //   console.log('pushed');
-    //   Message.create({
-    //     nick: data.nick,
-    //     text: data.text,
-    //     date: new Date()
-    //   })
-    // }
-    io.emit('message', data);
-  });
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
+mongoose.connect(
+    'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then((res) => {
+      io.on('connection', (socket) => {
+        console.log('Client connected');
+        socket.on('message', (data) => {
+          console.log('[server](message): %s', JSON.stringify(data));
+          if (!data.action) {
+            console.log('pushed');
+            Message.create({
+              nick: data.nick,
+              text: data.text,
+              date: new Date()
+            })
+          }
+          io.emit('message', data);
+        });
+        socket.on('disconnect', () => {
+          console.log('Client disconnected');
+        });
+      });
 
-server.listen(port, () => {
-  console.log('Server started at port: '+ port);
-});
-
-// mongoose.connect(
-//     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
-//     {
-//         useNewUrlParser: true,
-//         useUnifiedTopology: true
-//     })
-//     .then((res) => {
-//
-//     })
-//     .catch((e) => console.log(e));
+      server.listen(port, () => {
+        console.log('Server started at port: '+ port);
+      });
+    })
+    .catch((e) => console.log(e));
 
