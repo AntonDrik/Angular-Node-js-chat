@@ -11,8 +11,8 @@ const path              = require('path');
 
 const port = process.env.PORT || 8080;
 const app = express();
-// let server = http.Server(app);
-let io = socketIO(app);
+let server = http.Server(app);
+let io = socketIO(server);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -32,14 +32,14 @@ io.on('connection', (socket) => {
   console.log('Client connected');
   socket.on('message', (data) => {
     console.log('[server](message): %s', JSON.stringify(data));
-    if (!data.action) {
-      console.log('pushed');
-      Message.create({
-        nick: data.nick,
-        text: data.text,
-        date: new Date()
-      })
-    }
+    // if (!data.action) {
+    //   console.log('pushed');
+    //   Message.create({
+    //     nick: data.nick,
+    //     text: data.text,
+    //     date: new Date()
+    //   })
+    // }
     io.emit('message', data);
   });
   socket.on('disconnect', () => {
