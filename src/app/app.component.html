@@ -1,0 +1,36 @@
+<ng-template #loading>
+  <router-outlet></router-outlet>
+</ng-template>
+
+<ng-template [ngIf]="!login" [ngIfElse]="loading">
+  <div class="chat">
+      <div class="chat-header">
+        <img src="assets/images/logo.jpg" alt="">
+        <span>Hello BRUS{{ nick }}</span>
+      </div>
+      <div class="chat-body">
+        <div class="chat-content" #mbox>
+          <div class="message" *ngFor="let message of messages">
+
+            <i class="message-action" *ngIf="message.action; else msg">
+              Brus{{ message.nick }}
+              <span [class]="message.action">{{ message.text }}</span>
+            </i>
+
+            <ng-template #msg>
+              <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
+              <span class="message-name">[BRUS]{{ message.nick }}:</span>
+              <p class="message-text" [innerHTML]="message.text"></p>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="chat-controls">
+          <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
+            <input type="text" formControlName="text" placeholder="Введи сюда свой высер">
+            <button class="btn" type="submit">BrusSend</button>
+          </form>
+        </div>
+      </div>
+  </div>
+</ng-template>
