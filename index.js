@@ -23,7 +23,7 @@ app.get('/', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
-mongoose.connect(process.env.MONGOLAB_URI,
+mongoose.connect('mongodb://localhost/chat',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
