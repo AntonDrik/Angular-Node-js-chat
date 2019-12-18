@@ -101,6 +101,7 @@ export class AppComponent implements  OnInit{
       text: this.chatForm.value['text'],
       date: new Date()
     });
+    this.chatForm.reset();
     this.scrollToBottom();
   }
 
