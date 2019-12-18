@@ -24,6 +24,29 @@ app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 
+app.listen(port, () => {
+  console.log('Server started at port: '+ port);
+});
+
+io.on('connection', (socket) => {
+  console.log('Client connected');
+  socket.on('message', (data) => {
+    console.log('[server](message): %s', JSON.stringify(data));
+    if (!data.action) {
+      console.log('pushed');
+      Message.create({
+        nick: data.nick,
+        text: data.text,
+        date: new Date()
+      })
+    }
+    io.emit('message', data);
+  });
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
 mongoose.connect(
     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
     {
@@ -32,28 +55,6 @@ mongoose.connect(
     })
     .then((res) => {
 
-      app.listen(port, () => {
-        console.log('Server started at port: '+ port);
-      });
-
-        io.on('connection', (socket) => {
-            console.log('Client connected');
-            socket.on('message', (data) => {
-                console.log('[server](message): %s', JSON.stringify(data));
-                if (!data.action) {
-                    console.log('pushed');
-                    Message.create({
-                        nick: data.nick,
-                        text: data.text,
-                        date: new Date()
-                    })
-                }
-                io.emit('message', data);
-            });
-            socket.on('disconnect', () => {
-                console.log('Client disconnected');
-            });
-        });
     })
     .catch((e) => console.log(e));
 
