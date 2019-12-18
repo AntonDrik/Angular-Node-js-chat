@@ -11,8 +11,8 @@ const path              = require('path');
 
 const port = process.env.PORT || 8080;
 const app = express();
-let server = http.Server(app);
-let io = socketIO(server);
+// let server = http.Server(app);
+let io = socketIO(app);
 
 app.use(cors());
 app.use(bodyParser.json());
