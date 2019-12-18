@@ -100,3 +100,17 @@ input.ng-touched.ng-invalid{
 
   }
 }
+
+@media (max-width: 576px) {
+  .chat {
+    &-header {
+      & img {
+        width: 100%;
+      }
+    }
+
+    &-body {
+      width: 100%;
+    }
+  }
+}
