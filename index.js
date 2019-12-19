@@ -51,7 +51,6 @@ mongoose.connect(
 
         socket.on('disconnect', (reason) => {
           console.log('[server](disconnect): %s',reason);
-          socket.disconnect();
         });
 
       });

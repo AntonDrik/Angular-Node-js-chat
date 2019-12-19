@@ -24,6 +24,18 @@ export class WebSocketService {
     })
   }
 
+  onConnect(): Observable<any> {
+    return new Observable<any>(subscriber => {
+      this.socket.on('connect', () => subscriber.next());
+    })
+  }
+
+  onDisconnect(): Observable<any> {
+    return new Observable<any>(subscriber => {
+      this.socket.on('disconnect', (reason) => subscriber.next(reason));
+    });
+  }
+
   onEvent(event): Observable<any> {
     return new Observable<string>(subscriber => {
       this.socket.on(event, () => subscriber.next())

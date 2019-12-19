@@ -56,9 +56,8 @@ export class AppComponent implements  OnInit{
       this.messages.push(message);
     });
 
-    this.webSocketService.onEvent('connect').subscribe(() => {
-      console.log(this.webSocketService.socket.id);
-      this.webSocketService.socket.reconnection = false;
+    this.webSocketService.onConnect().subscribe( () => {
+      console.log('connected '+this.webSocketService.socket.id);
       this.webSocketService.send({
         nick: this.nick,
         text: 'connected',
@@ -66,9 +65,14 @@ export class AppComponent implements  OnInit{
       });
     });
 
-    this.webSocketService.onEvent('connect_timeout').subscribe(() => {
-      console.log('ok');
+    this.webSocketService.onDisconnect().subscribe((reason) => {
+      if (reason === 'ping timeout') {
+        alert('123');
+        this.webSocketService.socket.disconnect();
+      }
+      alert('456');
     })
+
   }
 
   loadMessages(){
