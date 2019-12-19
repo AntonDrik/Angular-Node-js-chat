@@ -60,14 +60,16 @@ export class AppComponent implements  OnInit{
       console.log('connected');
       this.webSocketService.send({
         nick: this.nick,
-        text: 'BrusBoxed',
+        text: 'connected',
         action: 'connect'
       });
     });
   }
 
   loadMessages(){
-    this.http.get('/api/messages').subscribe((data:[]) => {
+    // const uri = 'http://localhost:8080/api/messages';
+    const uri = '/api/messages';
+    this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
       this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
     });
@@ -78,7 +80,7 @@ export class AppComponent implements  OnInit{
       this.authService.logout();
       this.webSocketService.send({
         nick: this.nick,
-        text: 'DisBrusBoxed',
+        text: 'disconnected',
         action: 'disconnect'
       });
     });
