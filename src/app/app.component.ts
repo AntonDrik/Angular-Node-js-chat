@@ -58,6 +58,7 @@ export class AppComponent implements  OnInit{
 
     this.webSocketService.onEvent('connect').subscribe(() => {
       console.log(this.webSocketService.socket.id);
+      this.webSocketService.socket.reconnection = false;
       this.webSocketService.send({
         nick: this.nick,
         text: 'connected',
