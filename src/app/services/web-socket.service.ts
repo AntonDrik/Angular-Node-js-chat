@@ -14,6 +14,7 @@ export class WebSocketService {
   constructor() {}
 
   initSocket(){
+    // this.socket = io(this.SERVER_URL);
     this.socket = io();
   }
 
