@@ -47,14 +47,11 @@ mongoose.connect(
         });
 
         socket.on('disconnect', (reason) => {
-          if (reason === 'io server disconnect') {
-            console.log(reason);
-          }
-          console.log(reason);
+          console.log('[server](disconnect): %s',reason);
         });
 
-        socket.on('connect_timeout', (attemptNumber) => {
-          console.log(attemptNumber);
+        socket.on('connect_timeout', (timeout) => {
+          console.log('[server](connect_timeout): %s',timeout);
         });
 
       });
