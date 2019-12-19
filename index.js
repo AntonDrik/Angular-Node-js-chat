@@ -11,8 +11,16 @@ const path              = require('path');
 const port = process.env.PORT || 8080;
 const app = express();
 let server = http.createServer(app);
+
 let io = socketIO(server, {
-  pingTimeout: 500
+  pingTimeout: 10000,
+  pingInterval: 10000
+});
+
+io.use((socket, next) => {
+  var handshakeData = socket.request;
+  socket.userName = handshakeData._query['userName'];
+  next();
 });
 
 app.use(cors());
@@ -33,13 +41,32 @@ mongoose.connect(
     })
     .then((res) => {
 
-      io.on('connection', (socket) => {
-        console.log('Client connected');
+      io.on('connect', (socket) => {
 
+        //connect
+        console.log(`[server](connect): ${socket.userName} connected`);
+        socket.broadcast.emit('message', {
+          nick: socket.userName,
+          text: 'online',
+          action: 'connect'
+        });
+
+        //disconnect
+        socket.on('disconnect', (reason) => {
+          setTimeout(() => {
+            console.log(`[server](disconnect): ${socket.userName} %s`,reason);
+            socket.broadcast.emit('message', {
+              nick: socket.userName,
+              text: 'offline',
+              action: 'disconnect'
+            })
+          },1000);
+        });
+
+        //send message
         socket.on('message', (data) => {
           console.log('[server](message): %s', JSON.stringify(data));
           if (!data.action) {
-            console.log('pushed');
             Message.create({
               nick: data.nick,
               text: data.text,
@@ -47,10 +74,6 @@ mongoose.connect(
             })
           }
           io.emit('message', data);
-        });
-
-        socket.on('disconnect', (reason) => {
-          console.log('[server](disconnect): %s',reason);
         });
 
       });

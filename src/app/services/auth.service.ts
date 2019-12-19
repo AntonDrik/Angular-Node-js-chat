@@ -8,6 +8,10 @@ export class AuthService {
       return this.status.asObservable();
   }
 
+  getUser(): string {
+    return localStorage.getItem('userName');
+  }
+
   login(value): void {
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('userName', value);

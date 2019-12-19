@@ -9,14 +9,18 @@ import {Message} from "../interfaces/message";
 export class WebSocketService {
 
   public socket: any;
-  readonly SERVER_URL: string = 'http://localhost:3000';
+  readonly SERVER_URL: string = 'http://localhost:3001';
 
   constructor() {}
 
-  initSocket(){
-    // this.socket = io(this.SERVER_URL, {path: '/chat',timeout: 100});
+  initSocket(userName){
+    // this.socket = io(this.SERVER_URL, {
+    //   reconnection: false,
+    //   query: `userName=${userName}`
+    // });
     this.socket = io({
-      reconnection: false
+      reconnection: false,
+      query: `userName=${userName}`
     });
   }
 

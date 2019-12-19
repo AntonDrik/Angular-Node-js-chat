@@ -17,11 +17,12 @@ export class AppComponent implements  OnInit{
 
   title = 'BrusChat';
   login:boolean = false;
-  nick:string = "";
+  userName:string = "";
   chatForm: FormGroup;
   messages: Message[] = [];
   disableScrollDown = false;
   ioConnection: any;
+  isTyping: boolean;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -31,55 +32,41 @@ export class AppComponent implements  OnInit{
               private webSocketService: WebSocketService) {}
 
   ngOnInit() {
+    this.initForm();
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) {
         return;
       }
       const activated: ActivatedRoute[] = this.activatedRoute.root.children;
       this.login = activated[0].snapshot.data['login'];
-      this.nick = localStorage.getItem('userName');
     });
-    this.initForm();
     this.authService.isLoggedIn().subscribe(status => {
       if(status) {
-        this.initSocket();
+        this.userName = this.authService.getUser();
+        this.initSocket(this.userName);
         this.registerDomEvents();
-        this.loadMessages();
       }
     });
   }
 
-  initSocket(): void{
-    this.webSocketService.initSocket();
+  initSocket(userName){
+    this.webSocketService.initSocket(userName);
 
     this.ioConnection = this.webSocketService.onMessage().subscribe((message:Message) => {
       this.messages.push(message);
     });
 
     this.webSocketService.onConnect().subscribe( () => {
-      console.log('connected '+this.webSocketService.socket.id);
-      this.webSocketService.send({
-        nick: this.nick,
-        text: 'connected',
-        action: 'connect'
-      });
+      this.loadMessages();
     });
 
     this.webSocketService.onDisconnect().subscribe((reason) => {
-      if (reason === 'transport close') {
-        this.webSocketService.send({
-          nick: this.nick,
-          text: 'Ушёл в спячку',
-          action: 'connect'
-        });
-        // this.webSocketService.socket.disconnect();
-      }
-    })
+    });
 
   }
 
   loadMessages(){
-    // const uri = 'http://localhost:3000/api/messages';
+    // const uri = 'http://localhost:3001/api/messages';
     const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
@@ -91,12 +78,21 @@ export class AppComponent implements  OnInit{
     window.addEventListener("beforeunload",  (event) => {
       this.authService.logout();
     });
+    window.addEventListener('focus',  () => {
+      this.checkConnection();
+    });
   }
 
   initForm(){
     this.chatForm = this.fb.group({
       text: ['', [Validators.required]]
     });
+  }
+
+  checkConnection(){
+    if (this.webSocketService.socket.disconnected){
+      this.webSocketService.socket.connect();
+    }
   }
 
   sendMessage() {
@@ -106,12 +102,19 @@ export class AppComponent implements  OnInit{
       return;
     }
     this.webSocketService.send({
-      nick: this.nick,
+      nick: this.userName,
       text: this.chatForm.value['text'],
       date: new Date()
     });
     this.chatForm.reset();
     this.scrollToBottom();
+  }
+
+  enterTextarea(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.sendMessage();
+    }
   }
 
   ngAfterViewChecked() {
