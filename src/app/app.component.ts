@@ -67,10 +67,13 @@ export class AppComponent implements  OnInit{
 
     this.webSocketService.onDisconnect().subscribe((reason) => {
       if (reason === 'ping timeout') {
-        alert('123');
+        this.webSocketService.send({
+          nick: this.nick,
+          text: 'Ушёл в спячку',
+          action: 'connect'
+        });
         this.webSocketService.socket.disconnect();
       }
-      alert('456');
     })
 
   }
