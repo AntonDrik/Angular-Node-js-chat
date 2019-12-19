@@ -15,7 +15,9 @@ export class WebSocketService {
 
   initSocket(){
     // this.socket = io(this.SERVER_URL, {path: '/chat',timeout: 100});
-    this.socket = io();
+    this.socket = io({
+      reconnection: false
+    });
   }
 
   onMessage(): Observable<Message>{

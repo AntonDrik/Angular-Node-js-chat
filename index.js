@@ -49,7 +49,7 @@ mongoose.connect(
           io.emit('message', data);
         });
 
-        socket.on('disconnect', (reason, user) => {
+        socket.on('disconnect', (reason) => {
           console.log('[server](disconnect): %s',reason);
         });
 
