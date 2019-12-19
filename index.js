@@ -32,6 +32,7 @@ mongoose.connect(
     .then((res) => {
       io.on('connection', (socket) => {
         console.log('Client connected');
+
         socket.on('message', (data) => {
           console.log('[server](message): %s', JSON.stringify(data));
           if (!data.action) {
@@ -44,9 +45,18 @@ mongoose.connect(
           }
           io.emit('message', data);
         });
-        socket.on('disconnect', () => {
-          console.log('Client disconnected');
+
+        socket.on('disconnect', (reason) => {
+          if (reason === 'io server disconnect') {
+            console.log(reason);
+          }
+          console.log(reason);
         });
+
+        socket.on('connect_timeout', (attemptNumber) => {
+          console.log(attemptNumber);
+        });
+
       });
 
       server.listen(port, () => {

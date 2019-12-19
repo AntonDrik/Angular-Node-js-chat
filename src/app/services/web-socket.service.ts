@@ -8,14 +8,16 @@ import {Message} from "../interfaces/message";
 })
 export class WebSocketService {
 
-  private socket: any;
-  readonly SERVER_URL: string = 'ws://localhost:8080/';
+  public socket: any;
+  readonly SERVER_URL: string = 'ws://localhost:3000/';
 
   constructor() {}
 
   initSocket(){
-    // this.socket = io(this.SERVER_URL);
-    this.socket = io();
+    // this.socket = io(this.SERVER_URL, {timeout: 100});
+    this.socket = io({
+      timeout: 100
+    });
   }
 
   onMessage(): Observable<Message>{

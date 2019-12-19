@@ -56,18 +56,22 @@ export class AppComponent implements  OnInit{
       this.messages.push(message);
     });
 
-    this.webSocketService.onEvent('connect').subscribe(() =>{
-      console.log('connected');
+    this.webSocketService.onEvent('connect').subscribe(() => {
+      console.log(this.webSocketService.socket.id);
       this.webSocketService.send({
         nick: this.nick,
         text: 'connected',
         action: 'connect'
       });
     });
+
+    this.webSocketService.onEvent('connect_timeout').subscribe(() => {
+      console.log('ok');
+    })
   }
 
   loadMessages(){
-    // const uri = 'http://localhost:8080/api/messages';
+    // const uri = 'http://localhost:3000/api/messages';
     const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
@@ -78,11 +82,6 @@ export class AppComponent implements  OnInit{
   registerDomEvents(){
     window.addEventListener("beforeunload",  (event) => {
       this.authService.logout();
-      this.webSocketService.send({
-        nick: this.nick,
-        text: 'disconnected',
-        action: 'disconnect'
-      });
     });
   }
 
@@ -110,7 +109,6 @@ export class AppComponent implements  OnInit{
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
-
 
   public scrollToBottom(): void {
     try {
