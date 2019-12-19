@@ -9,14 +9,14 @@ import {Message} from "../interfaces/message";
 export class WebSocketService {
 
   public socket: any;
-  readonly SERVER_URL: string = 'ws://localhost:3000/';
+  readonly SERVER_URL: string = 'http://localhost:3000';
 
   constructor() {}
 
   initSocket(){
-    // this.socket = io(this.SERVER_URL, {timeout: 100});
+    // this.socket = io(this.SERVER_URL, {path: '/chat',timeout: 100});
     this.socket = io({
-      timeout: 100
+      reconnection: false
     });
   }
 

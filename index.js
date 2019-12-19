@@ -11,7 +11,9 @@ const path              = require('path');
 const port = process.env.PORT || 8080;
 const app = express();
 let server = http.createServer(app);
-let io = socketIO(server);
+let io = socketIO(server, {
+  pingTimeout: 500
+});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -30,6 +32,7 @@ mongoose.connect(
         useUnifiedTopology: true
     })
     .then((res) => {
+
       io.on('connection', (socket) => {
         console.log('Client connected');
 
@@ -48,10 +51,6 @@ mongoose.connect(
 
         socket.on('disconnect', (reason) => {
           console.log('[server](disconnect): %s',reason);
-        });
-
-        socket.on('connect_timeout', (timeout) => {
-          console.log('[server](connect_timeout): %s',timeout);
         });
 
       });
