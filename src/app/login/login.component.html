@@ -1,24 +1,78 @@
-<div class="login">
-  <h2 class="login-title">Login</h2>
-  <div class="login-form form">
-    <form [formGroup]="loginForm" (submit)="onSubmit()">
+<div class="register-box">
 
-      <div class="form-label">
-        <label for="login">Логин</label>
-        <input type="text" id="login" formControlName="login" />
-      </div>
+  <div class="register-box-container">
+    <mat-tab-group (selectedTabChange)="resetForm($event)">
+      <mat-tab label="Login">
+          <div class="login-form form">
+            <form [formGroup]="loginForm" (submit)="onSubmit(loginForm)">
 
-<!--      <div class="form-label">-->
-<!--        <label for="password">Пароль</label>-->
-<!--        <input type="password" id="password" formControlName="password" />-->
-<!--      </div>-->
+              <div class="form-label">
+                <div class="form-label-control">
+                  <input type="text" formControlName="login" placeholder="Username"/>
+                  <div class="form-label-icon">
+                    <img src="/assets/images/user-icon.png" alt="" width="20">
+                  </div>
+                </div>
+              </div>
 
-      <div class="error" *ngIf="isWrongCred">
-        Enter your nick
-      </div>
+              <div class="form-label">
+                <div class="form-label-control">
+                  <input type="password" formControlName="password" placeholder="Password"/>
+                  <div class="form-label-icon">
+                    <img src="/assets/images/password-icon.png" alt="" width="14">
+                  </div>
+                </div>
+              </div>
 
-      <button class="login-btn" type="submit">Login</button>
+              <div class="notification error" *ngIf="isWrongCred">Неверные имя или пароль</div>
+              <button class="btn-reg-box btn-login" type="submit">Login</button>
+            </form>
+          </div>
+      </mat-tab>
+      <mat-tab label="Register">
+          <div class="login-form form">
+            <form [formGroup]="registerForm" (submit)="onSubmit(registerForm)">
 
-    </form>
+              <div class="form-label">
+                <div class="form-label-control">
+                  <input type="text" formControlName="login" placeholder="Enter your name"/>
+                  <div class="form-label-icon">
+                    <img src="/assets/images/user-icon.png" alt="" width="20">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-label">
+                <div class="form-label-control">
+                  <input type="password" formControlName="password" placeholder="Password"/>
+                  <div class="form-label-icon">
+                    <img src="/assets/images/password-icon.png" alt="" width="14">
+                  </div>
+                </div>
+                <div class="notification error" *ngIf="regPassword.errors?.minlength">Длина пароля не менее 6 символов</div>
+              </div>
+
+              <div class="form-label">
+                <div class="form-label-control">
+                  <input type="password" formControlName="confirmPassword" placeholder="Confirm password"/>
+                  <div class="form-label-icon">
+                    <img src="/assets/images/password-icon.png" alt="" width="14">
+                  </div>
+                </div>
+                <div class="notification error" *ngIf="(registerForm.errors?.mismatch)">Пароли не совпадают</div>
+              </div>
+
+              <div *ngIf="isWrongCred" class="notification error">Некорректные данные</div>
+              <div *ngIf="serverRes" class="notification" [ngClass]="{'success': serverRes.ok, 'error': !serverRes.ok}">
+                {{ serverRes.caption }}
+              </div>
+
+              <button class="btn-reg-box btn-register" type="submit" [disabled]="registerForm.invalid">Register</button>
+            </form>
+          </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
+
 </div>
+

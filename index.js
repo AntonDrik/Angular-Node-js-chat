@@ -26,12 +26,13 @@ io.use((socket, next) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true}));
-app.use('/api', routes.messages);
 app.use(express.static(__dirname + '/dist/chat'));
 
 app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
+app.use('/api', routes.messages);
+app.use('/api', routes.register);
 
 mongoose.connect(
     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',

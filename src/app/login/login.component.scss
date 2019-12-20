@@ -1,64 +1,171 @@
-.login {
-  width: 400px;
-  background-color: #dedede;
-  border-radius: 5px;
-  box-shadow: 0 0 15px 0 #d0d0d0;
-  padding: 20px 40px 20px;
-  margin: 0 auto;
+::-webkit-input-placeholder{
+  font-family: SFProRegular;
+  font-size: 16px;
+}
+::-moz-placeholder {
+  font-family: SFProRegular;
+  font-size: 16px;
+}
+:-moz-placeholder {
+  font-family: SFProRegular;
+  font-size: 16px;
+}
+:-ms-input-placeholder {
+  font-family: SFProRegular;
+  font-size: 16px;
+}
 
-  &-title {
-    text-align: center;
-    color: black;
-    font-size: 24px;
-    padding-bottom: 10px;
+::ng-deep.mat-tab-label {
+  width: 50%;
+}
+
+::ng-deep.mat-tab-header {
+  margin-bottom: 50px;
+}
+
+
+.register-box {
+  background: url("../../assets/images/register-bg.jpg") no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-container {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 15px 0 #757575;
+    padding: 20px 40px 20px;
   }
 }
 
 .form {
   & input {
     display: block;
-    width: 98%;
-    height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 50px;
     margin: 0 auto;
-    padding-left: 5px;
+    padding-left: 12px;
     outline: none;
     position: relative;
-    z-index: 2;
-    border-radius: 5px;
-    border: 1px solid;
+    z-index: 1;
+    border-radius: 0 3px 3px 0;
+    border: 1px solid #c7c7c7;
+    background: #f2f2f2;
+    font-family: SFProRegular;
+    font-size: 17px;
 
     &.ng-touched.ng-invalid{
-      border-color: red;
+      background-color: #f7e5e5;
+      border: 1px solid #ffa8a8;
+
+      & + div {
+        background-color: #ffa8a8;
+        border: 1px solid #ffa8a8;
+        border-right: none;
+      }
     }
   }
 
+  & label {
+    position: absolute;
+    z-index: 2;
+    top: 16px;
+    left: 60px;
+    font-family: SFProRegular;
+    color: #00000080;
+  }
+
   &-label {
-    margin-bottom: 10px;
+    position: relative;
+    margin-bottom: 30px;
+
+    &-control {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    &-icon {
+      width: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #d8d8d8;
+      border-radius: 3px 0 0 3px;
+      border: 1px solid #d8d8d8;
+      border-right: none;
+    }
+  }
+}
+
+.btn-reg-box {
+  width: 100%;
+  height: 50px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.btn-login {
+  background-color: #2d8e31;
+  border: 1px solid #025d02;
+}
+
+.btn-register {
+  background-color: #b76c6c;
+  border: 1px solid #650000;
+
+  &[disabled] {
+    background-color: #ababab;
+    border: 1px solid #777676;
+    color: #4a4949;
+  }
+}
+
+.notification {
+  padding: 10px 10px 10px 40px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  position: relative;
+
+  &:before {
+    content: "";
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    position: absolute;
   }
 }
 
 .error {
-  padding: 10px 10px 10px 40px;
-  border-radius: 5px;
   background-color: #fbd3d2;
-  margin-bottom: 10px;
-  font-size: 16px;
-  position: relative;
   &:before {
-    content: "";
     background-image: url(/assets/images/message-error.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    position: absolute;
     width: 25px;
-    height: 25px;
+    height: 20px;
     left: 8px;
-    top: 5px;
+    top: 8px;
+  }
+}
+
+.success {
+  background-color: #d2fbd3;
+  &:before {
+    background-image: url(/assets/images/message-success.png);
+    width: 20px;
+    height: 20px;
+    left: 10px;
+    top: 8px;
   }
 }
 
 @media (max-width: 576px) {
-  .login {
-    width: auto;
+  .register-box-container {
+    width: 100%;
+    padding: 20px;
   }
 }

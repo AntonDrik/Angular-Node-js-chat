@@ -21,7 +21,6 @@ export class AppComponent implements  OnInit{
   chatForm: FormGroup;
   messages: Message[] = [];
   disableScrollDown = false;
-  ioConnection: any;
   isTyping: boolean;
 
   constructor(private router: Router,
@@ -52,15 +51,12 @@ export class AppComponent implements  OnInit{
   initSocket(userName){
     this.webSocketService.initSocket(userName);
 
-    this.ioConnection = this.webSocketService.onMessage().subscribe((message:Message) => {
-      this.messages.push(message);
-    });
-
     this.webSocketService.onConnect().subscribe( () => {
       this.loadMessages();
     });
 
-    this.webSocketService.onDisconnect().subscribe((reason) => {
+    this.webSocketService.onMessage().subscribe((message:Message) => {
+      this.messages.push(message);
     });
 
   }
@@ -70,7 +66,7 @@ export class AppComponent implements  OnInit{
     const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
-      this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
+      this.scrollToBottom();
     });
   }
 
@@ -118,7 +114,7 @@ export class AppComponent implements  OnInit{
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   public scrollToBottom(): void {
