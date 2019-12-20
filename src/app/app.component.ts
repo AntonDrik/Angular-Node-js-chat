@@ -40,7 +40,7 @@ export class AppComponent implements  OnInit{
       this.login = activated[0].snapshot.data['login'];
     });
     this.authService.isLoggedIn().subscribe(status => {
-      console.log(status);
+      alert(status);
       if(status) {
         this.userName = this.authService.getUser();
         this.initSocket(this.userName);
