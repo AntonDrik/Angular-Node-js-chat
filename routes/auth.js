@@ -17,7 +17,7 @@ router.post('/login', (req, res) => {
                 }
                 else {
                     res.json({
-                        ok: true,
+                        ok: false,
                         caption: 'Неверный логин или пароль'
                     })
                 }
