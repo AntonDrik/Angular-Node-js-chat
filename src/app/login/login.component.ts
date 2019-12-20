@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
         this.serverRes = data;
         if (data.ok) {
           localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('userName', data['login']);
+          localStorage.setItem('userName', form.value['login']);
           this.authService.status.next(true);
           this.router.navigate(['/chat']);
         }
