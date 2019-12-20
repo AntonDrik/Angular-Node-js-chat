@@ -9,7 +9,6 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
-import {RegisterService} from "./services/register.service";
 
 @NgModule({
   declarations: [
@@ -26,7 +25,6 @@ import {RegisterService} from "./services/register.service";
   ],
   providers: [
     AuthGuard,
-    RegisterService,
     AuthService
   ],
   bootstrap: [AppComponent]

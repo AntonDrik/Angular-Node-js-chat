@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
-import {RegisterService} from "../services/register.service";
 import {Error} from "../interfaces/error";
 
 @Component({
@@ -20,8 +19,7 @@ export class LoginComponent implements OnInit {
   serverRes: Error;
   constructor(private router: Router,
               private formBuilder: FormBuilder,
-              private authService: AuthService,
-              private registerService: RegisterService) { }
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.initForm();
@@ -31,7 +29,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       login: ['', [
         Validators.required,
-        Validators.pattern(/[A-z]/)
+        Validators.pattern(/^\S*[A-z0-9]$/)
       ]],
       password: ['', [
         Validators.required
@@ -41,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       login: ['', [
         Validators.required,
-        Validators.pattern(/[A-z0-9]/)
+        Validators.pattern(/^\S*[A-z0-9]$/)
       ]],
       password: ['', [
         Validators.required,
@@ -87,12 +85,19 @@ export class LoginComponent implements OnInit {
     const data = form.value;
     //login
     if (form === this.loginForm) {
-      // this.authService.login(form.value['login']);
-      // this.router.navigate(['/chat']);
+      this.authService.login(data).subscribe((data: Error) => {
+        this.serverRes = data;
+        if (data.ok) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userName', data['login']);
+          this.authService.status.next(true);
+          this.router.navigate(['/chat']);
+        }
+      })
     }
     //register
     else {
-      this.registerService.register(data).subscribe((data: Error) => {
+      this.authService.register(data).subscribe((data: Error) => {
         this.serverRes = data;
       });
     }

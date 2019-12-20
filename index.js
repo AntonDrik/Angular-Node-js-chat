@@ -32,13 +32,14 @@ app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
 app.use('/api', routes.messages);
-app.use('/api', routes.register);
+app.use('/api', routes.auth);
 
 mongoose.connect(
     'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     })
     .then((res) => {
 

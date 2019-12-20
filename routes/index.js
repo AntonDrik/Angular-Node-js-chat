@@ -1,4 +1,4 @@
 const messages = require('./message');
-const register = require('./register');
+const auth = require('./auth');
 
-module.exports = {messages, register};
+module.exports = {messages, auth};

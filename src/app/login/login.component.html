@@ -13,6 +13,7 @@
                     <img src="/assets/images/user-icon.png" alt="" width="20">
                   </div>
                 </div>
+                <div class="notification error" *ngIf="login.errors?.pattern">Только латинские буквы и цифры</div>
               </div>
 
               <div class="form-label">
@@ -24,7 +25,10 @@
                 </div>
               </div>
 
-              <div class="notification error" *ngIf="isWrongCred">Неверные имя или пароль</div>
+              <div class="notification error" *ngIf="isWrongCred">Заполните все поля</div>
+              <div *ngIf="serverRes" class="notification" [ngClass]="{'success': serverRes.ok, 'error': !serverRes.ok}">
+                {{ serverRes.caption }}
+              </div>
               <button class="btn-reg-box btn-login" type="submit">Login</button>
             </form>
           </div>
@@ -40,6 +44,7 @@
                     <img src="/assets/images/user-icon.png" alt="" width="20">
                   </div>
                 </div>
+                <div class="notification error" *ngIf="regLogin.errors?.pattern">Только латинские буквы и цифры</div>
               </div>
 
               <div class="form-label">

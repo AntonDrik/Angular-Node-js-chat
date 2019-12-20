@@ -69,6 +69,16 @@
         border-right: none;
       }
     }
+
+    &.ng-valid {
+      background-color: #ecffe7;
+      border: 1px solid #b2eaa3;
+
+      & + div {
+        background-color: #b2eaa3;
+        border: 1px solid #b2eaa3;
+      }
+    }
   }
 
   &-label {
@@ -99,6 +109,9 @@
   outline: none;
   cursor: pointer;
   border-radius: 3px;
+  color: white;
+  font-size: 20px;
+  font-family: SFProRegular;
 }
 
 .btn-login {
@@ -107,8 +120,8 @@
 }
 
 .btn-register {
-  background-color: #b76c6c;
-  border: 1px solid #650000;
+  background-color: #bd4040;
+  border: 1px solid #6d0404;
 
   &[disabled] {
     background-color: #ababab;
@@ -118,7 +131,7 @@
 }
 
 .notification {
-  padding: 10px 10px 10px 40px;
+  padding: 10px 10px 10px 50px;
   margin-bottom: 10px;
   font-size: 16px;
   position: relative;
@@ -136,10 +149,10 @@
   background-color: #fbd3d2;
   &:before {
     background-image: url(/assets/images/message-error.png);
-    width: 25px;
-    height: 20px;
-    left: 8px;
-    top: 8px;
+    width: 24px;
+    height: 19px;
+    left: 11px;
+    top: 10px;
   }
 }
 
