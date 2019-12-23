@@ -10,6 +10,10 @@ const path              = require('path');
 
 const port = process.env.PORT || 8080;
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true}));
+app.use(express.static(__dirname + '/dist/chat'));
 const users = [];
 let server = http.createServer(app);
 
@@ -25,11 +29,6 @@ io.use((socket, next) => {
   next();
 });
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static(__dirname + '/dist/chat'));
-
 app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
@@ -40,8 +39,7 @@ mongoose.connect(
   'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
+    useUnifiedTopology: true
   })
   .then((res) => {
     io.on('connect', (socket) => {
