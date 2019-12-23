@@ -5,6 +5,8 @@ import {WebSocketService} from "./services/web-socket.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Message} from "./interfaces/Message";
 import {HttpClient} from "@angular/common/http";
+import {UserService} from "./services/user.service";
+import {User} from "./interfaces/User";
 
 @Component({
   selector: 'app-root',
@@ -19,8 +21,9 @@ export class AppComponent implements  OnInit{
   login:boolean = false;
   userName:string = "";
   chatForm: FormGroup;
+  currUser: User;
   messages: Message[] = [];
-  notifications: Notification[] = [];
+  // notifications: Notification[] = [];
   users: [] = [];
   disableScrollDown = false;
   isTyping: boolean;
@@ -30,7 +33,8 @@ export class AppComponent implements  OnInit{
               private authService: AuthService,
               private fb: FormBuilder,
               private http: HttpClient,
-              private webSocketService: WebSocketService) {}
+              private webSocketService: WebSocketService,
+              private userService: UserService) {}
 
   ngOnInit() {
     this.initForm();
@@ -43,8 +47,8 @@ export class AppComponent implements  OnInit{
     });
     this.authService.isLoggedIn().subscribe(status => {
       if(status) {
-        this.userName = this.authService.getUser();
-        this.initSocket(this.userName);
+        this.currUser = this.userService.currentUser;
+        this.initSocket(this.currUser.login);
         this.registerDomEvents();
       }
     });
@@ -54,7 +58,6 @@ export class AppComponent implements  OnInit{
     this.webSocketService.initSocket(userName);
 
     this.webSocketService.onConnect().subscribe( () => {
-      console.log('onConnect');
       this.loadMessages();
     });
 
@@ -72,7 +75,6 @@ export class AppComponent implements  OnInit{
     const uri = '/api/messages';
     console.log(uri);
     this.http.get(uri).subscribe((data:[]) => {
-      console.log(data);
       this.messages = data.reverse();
       this.scrollToBottom();
     });

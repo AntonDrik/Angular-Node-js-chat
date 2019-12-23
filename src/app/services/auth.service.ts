@@ -3,6 +3,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Response} from "../interfaces/Response";
 import {Router} from "@angular/router";
+import {User} from "../interfaces/User";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,9 @@ export class AuthService {
   readonly SERVER_URL_REG: string = '/api/register';
   readonly SERVER_URL_LOG: string = '/api/login';
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router,
+              private http: HttpClient,
+              private userService: UserService) {}
 
   status = new BehaviorSubject<boolean>(false);
 
@@ -31,13 +35,13 @@ export class AuthService {
     return localStorage.getItem('userName');
   }
 
-  //should return Promise<User>
   login(value): Promise<Response> {
     return new Promise<Response>((res) => {
-      this.http.post(this.SERVER_URL_LOG, value).subscribe((data: Response) => {
+      this.http.post(this.SERVER_URL_LOG, value).subscribe((data:Response) => {
         if (data.ok) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('userName', value.login);
+          // localStorage.setItem('isLoggedIn', 'true');
+          // localStorage.setItem('userName', value.login);
+          this.userService.currentUser= data.user;
           this.status.next(true);
           this.router.navigate(['/chat']);
         }

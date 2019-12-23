@@ -5,7 +5,11 @@
   margin-top: 20px;
 
   &-header {
-    padding-top: 20px;
+    display: flex;
+    padding: 10px;
+    background-color: #ececec;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   &-body {
@@ -38,9 +42,7 @@
 
 .online {
   &-box {
-    padding: 10px;
-    background-color: #ececec;
-
+    width: 100%;
     * {
       font-family: SFProRegular;
     }
@@ -50,15 +52,65 @@
     font-size: 16px;
   }
   &-list {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 0;
     margin-top: 10px;
   }
   &-user {
     display: inline-block;
     padding-right: 10px;
     color: #027b07;
+  }
+}
+
+.user {
+  &-box {
+    position: relative;
+  }
+  &-arrow {
+    background-image: url(/assets/images/arrow-down.png);
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  &-dropdown-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover {
+      background-color: white;
+      border-radius: 4px;
+    }
+
+    & img {
+      width: 30px;
+    }
+
+    & span {
+      margin-left: 5px;
+    }
+  }
+  &-menu {
+    position: absolute;
+    width: 200px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 2;
+
+    &__item {
+      cursor: pointer;
+      &:hover {
+        background-color: gray;
+      }
+    }
   }
 }
 

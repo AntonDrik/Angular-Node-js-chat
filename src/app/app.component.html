@@ -4,9 +4,7 @@
 
 <ng-template [ngIf]="!login" [ngIfElse]="loading">
   <div class="chat">
-    <div class="user-box">
-
-    </div>
+    <div class="chat-header">
       <div class="online-box">
         <div class="online-header"><strong>Online</strong></div>
         <ul class="list online-list">
@@ -15,6 +13,24 @@
           </li>
         </ul>
       </div>
+      <div class="user-box">
+        <div class="user-dropdown-btn">
+          <img [src]="currUser.avatar" alt="">
+          <span class="user-arrow"></span>
+        </div>
+        <div class="user-menu">
+          <div class="user-menu__header">
+            {{ currUser.login }}
+          </div>
+          <div class="user-menu__list-wrapper">
+            <ul class="list user-menu__list">
+              <li class="user-menu__item">Edit Profile</li>
+              <li class="user-menu__item">Logout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
       <div class="chat-body">
         <div class="chat-content" #mbox>
           <div class="message" *ngFor="let message of messages">

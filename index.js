@@ -28,12 +28,11 @@ io.use((socket, next) => {
   users.push(userName);
   next();
 });
-
+app.use('/api', routes.messages);
+app.use('/api', routes.auth);
 app.get('/*', function(req,res) {
   res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
 });
-app.use('/api', routes.messages);
-app.use('/api', routes.auth);
 
 mongoose.connect(
   'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
@@ -57,7 +56,7 @@ mongoose.connect(
         },1000);
       });
 
-      //notification message
+      //update users
       socket.on('updateUsers', (data) => {
         console.log('[server](notification): %s', JSON.stringify(data));
         io.emit('updateUsers', data);

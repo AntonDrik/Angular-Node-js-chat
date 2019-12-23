@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {Response} from "../interfaces/Response";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'login',
@@ -27,11 +28,11 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.loginForm = this.formBuilder.group({
-      login: ['', [
+      login: ['newUser', [
         Validators.required,
         Validators.pattern(/^\S*[A-z0-9]$/)
       ]],
-      password: ['', [
+      password: ['123123', [
         Validators.required
       ]]
     });
