@@ -54,6 +54,7 @@ export class AppComponent implements  OnInit{
     this.webSocketService.initSocket(userName);
 
     this.webSocketService.onConnect().subscribe( () => {
+      console.log('onConnect');
       this.loadMessages();
     });
 
@@ -69,7 +70,9 @@ export class AppComponent implements  OnInit{
   loadMessages(){
     // const uri = 'http://localhost:3001/api/messages';
     const uri = '/api/messages';
+    console.log(uri);
     this.http.get(uri).subscribe((data:[]) => {
+      console.log(data);
       this.messages = data.reverse();
       this.scrollToBottom();
     });

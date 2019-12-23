@@ -8,8 +8,7 @@ router.get('/messages', (req,res) => {
     // Message.deleteMany({});
     Message.find({}).sort({ _id: -1 }).limit(20).exec(function (err, item) {
         if(err) return console.log(err);
-        console.log(item);
-        res.send({item});
+        res.send(item);
     });
 });
 
