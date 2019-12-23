@@ -13,13 +13,14 @@ const app = express();
 let server = http.createServer(app);
 
 let io = socketIO(server, {
-  pingTimeout: 10000,
-  pingInterval: 10000
+  pingTimeout: 5000,
+  pingInterval: 5000
 });
 
 io.use((socket, next) => {
-  var handshakeData = socket.request;
-  socket.userName = handshakeData._query['userName'];
+  var userName = socket.request._query['userName'];
+  socket.userName = userName;
+  users.push(userName);
   next();
 });
 
@@ -35,53 +36,54 @@ app.use('/api', routes.messages);
 app.use('/api', routes.auth);
 
 mongoose.connect(
-    'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true
-    })
-    .then((res) => {
+  'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  })
+  .then((res) => {
+    io.on('connect', (socket) => {
 
-      io.on('connect', (socket) => {
+      //connect
+      console.log(`[server](connect): ${socket.userName} connected`);
+      io.emit('updateUsers', users);
 
-        //connect
-        console.log(`[server](connect): ${socket.userName} connected`);
-        socket.broadcast.emit('message', {
-          nick: socket.userName,
-          text: 'online',
-          action: 'connect'
-        });
+      //disconnect
+      socket.on('disconnect', (reason) => {
+        setTimeout(() => {
+          console.log(`[server](disconnect): ${socket.userName} %s`,reason);
+          users.splice(users.indexOf(socket.userName), 1);
+          io.emit('updateUsers', users);
+        },1000);
+      });
 
-        //disconnect
-        socket.on('disconnect', (reason) => {
-          setTimeout(() => {
-            console.log(`[server](disconnect): ${socket.userName} %s`,reason);
-            socket.broadcast.emit('message', {
-              nick: socket.userName,
-              text: 'offline',
-              action: 'disconnect'
-            })
-          },1000);
-        });
+      //notification message
+      socket.on('updateUsers', (data) => {
+        console.log('[server](notification): %s', JSON.stringify(data));
+        io.emit('updateUsers', data);
+      });
 
-        //send message
-        socket.on('message', (data) => {
-          console.log('[server](message): %s', JSON.stringify(data));
-          if (!data.action) {
-            Message.create({
-              nick: data.nick,
-              text: data.text,
-              date: new Date()
-            })
-          }
-          io.emit('message', data);
+      //send message
+      socket.on('message', (data) => {
+        console.log('[server](message): %s', JSON.stringify(data));
+        Message.create({
+          nick: data.nick,
+          text: data.text,
+          date: new Date()
+        }).then(msg => {
+          io.emit('message', {
+            nick: msg.nick,
+            text: msg.text,
+            date: msg.date
+          });
         });
 
       });
+    });
 
-      server.listen(port, () => {
-        console.log('Server started at port: '+ port);
-      });
-    })
-    .catch((e) => console.log(e));
+    server.listen(port, () => {
+      console.log('Server started at port: '+ port);
+    });
+  })
+  .catch((e) => console.log(e));

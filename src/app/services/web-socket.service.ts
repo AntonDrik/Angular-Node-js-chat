@@ -14,14 +14,14 @@ export class WebSocketService {
   constructor() {}
 
   initSocket(userName){
-    this.socket = io(this.SERVER_URL, {
-      reconnection: false,
-      query: `userName=${userName}`
-    });
-    // this.socket = io({
+    // this.socket = io(this.SERVER_URL, {
     //   reconnection: false,
     //   query: `userName=${userName}`
     // });
+    this.socket = io({
+      reconnection: false,
+      query: `userName=${userName}`
+    });
   }
 
   onMessage(): Observable<Message>{

@@ -67,8 +67,8 @@ export class AppComponent implements  OnInit{
   }
 
   loadMessages(){
-    const uri = 'http://localhost:3001/api/messages';
-    // const uri = '/api/messages';
+    // const uri = 'http://localhost:3001/api/messages';
+    const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
       this.scrollToBottom();

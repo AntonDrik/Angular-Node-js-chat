@@ -39,7 +39,6 @@ router.post('/register', (req, res) => {
     console.log(confirmPassword);
     User.findOne({login}).then(user =>{
         if (user) {
-            console.log('Имя занято');
             res.json({
                 ok: false,
                 caption: 'Имя уже занято!'

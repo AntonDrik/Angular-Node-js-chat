@@ -10,10 +10,10 @@ import {Router} from "@angular/router";
 
 export class AuthService {
 
-  readonly SERVER_URL_REG: string = 'http://localhost:3001/api/register';
-  readonly SERVER_URL_LOG: string = 'http://localhost:3001/api/login';
-  // readonly SERVER_URL_REG: string = '/api/register';
-  // readonly SERVER_URL_LOG: string = '/api/login';
+  // readonly SERVER_URL_REG: string = 'http://localhost:3001/api/register';
+  // readonly SERVER_URL_LOG: string = 'http://localhost:3001/api/login';
+  readonly SERVER_URL_REG: string = '/api/register';
+  readonly SERVER_URL_LOG: string = '/api/login';
 
   constructor(private router: Router, private http: HttpClient) {}
 
