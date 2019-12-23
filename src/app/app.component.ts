@@ -39,14 +39,13 @@ export class AppComponent implements  OnInit{
       const activated: ActivatedRoute[] = this.activatedRoute.root.children;
       this.login = activated[0].snapshot.data['login'];
     });
-    this.authService.isLoggedIn().subscribe(status => {
-      alert(status);
-      if(status) {
-        this.userName = this.authService.getUser();
-        this.initSocket(this.userName);
-        this.registerDomEvents();
-      }
-    });
+    // this.authService.isLoggedIn().subscribe(status => {
+    //   if(status) {
+    //     this.userName = this.authService.getUser();
+    //     this.initSocket(this.userName);
+    //     this.registerDomEvents();
+    //   }
+    // });
   }
 
   initSocket(userName){

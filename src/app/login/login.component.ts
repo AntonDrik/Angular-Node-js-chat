@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
-import {Error} from "../interfaces/error";
+import {Response} from "../interfaces/response";
 
 @Component({
   selector: 'login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   registerForm: FormGroup;
   isWrongCred:boolean = false;
-  serverRes: Error;
+  serverRes: Response;
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private authService: AuthService) { }
@@ -85,19 +85,41 @@ export class LoginComponent implements OnInit {
     const data = form.value;
     //login
     if (form === this.loginForm) {
-      this.authService.login(data).subscribe((data: Error) => {
-        this.serverRes = data;
-        if (data.ok) {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('userName', form.value['login']);
-          this.authService.status.next(true);
-          this.router.navigate(['/chat']);
+      this.authService.isLoggedIn().then(status =>{
+        if (!status) {
+          this.authService.login(data).then(response => {
+            this.serverRes = response;
+          });
         }
-      })
+      });
+      // this.authService.login(data).subscribe((data: Response) => {
+      //
+      // })
+      // let promise = new Promise((res, rej) => {
+      //   this.authService.login(data).subscribe((data: Response) => {
+      //     res(data);
+      //   });
+      // });
+      // promise.then((result: Response) => {
+      //   this.authService.isLoggedIn().subscribe(status => {
+      //     this.serverRes = result;
+      //     if (!status && result.ok) {
+      //       this.authService.status.next(true);
+      //       localStorage.setItem('isLoggedIn', 'true');
+      //       localStorage.setItem('userName', form.value['login']);
+      //       this.router.navigate(['/chat']);
+      //     }
+      //   });
+      // }).catch(err => {
+      //   this.serverRes = {
+      //     ok: false,
+      //     caption: 'Ошибка входа. Попробуйте позже!'
+      //   }
+      // })
     }
     //register
     else {
-      this.authService.register(data).subscribe((data: Error) => {
+      this.authService.register(data).subscribe((data: Response) => {
         this.serverRes = data;
       });
     }

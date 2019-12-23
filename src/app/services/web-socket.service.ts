@@ -18,10 +18,6 @@ export class WebSocketService {
     //   reconnection: false,
     //   query: `userName=${userName}`
     // });
-    this.socket = io({
-      reconnection: false,
-      query: `userName=${userName}`
-    });
   }
 
   onMessage(): Observable<Message>{
