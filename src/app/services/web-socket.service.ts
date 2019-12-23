@@ -8,20 +8,34 @@ import {Message} from "../interfaces/message";
 })
 export class WebSocketService {
 
-  private socket: any;
-  readonly SERVER_URL: string = 'ws://localhost:8080/';
+  public socket: any;
+  readonly SERVER_URL: string = 'http://localhost:3001';
 
   constructor() {}
 
-  initSocket(){
-    // this.socket = io(this.SERVER_URL);
-    this.socket = io();
+  initSocket(userName){
+    // this.socket = io(this.SERVER_URL, {
+    //   reconnection: false,
+    //   query: `userName=${userName}`
+    // });
   }
 
   onMessage(): Observable<Message>{
     return new Observable<Message>(subscriber => {
       this.socket.on('message', (data:Message) => subscriber.next(data));
     })
+  }
+
+  onConnect(): Observable<any> {
+    return new Observable<any>(subscriber => {
+      this.socket.on('connect', () => subscriber.next());
+    })
+  }
+
+  onDisconnect(): Observable<any> {
+    return new Observable<any>(subscriber => {
+      this.socket.on('disconnect', (reason) => subscriber.next(reason));
+    });
   }
 
   onEvent(event): Observable<any> {

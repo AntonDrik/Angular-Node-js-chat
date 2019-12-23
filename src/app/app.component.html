@@ -6,7 +6,6 @@
   <div class="chat">
       <div class="chat-header">
 <!--        <img src="assets/images/logo.jpg" alt="">-->
-        <span>Hello {{ nick }}</span>
       </div>
       <div class="chat-body">
         <div class="chat-content" #mbox>
@@ -18,8 +17,10 @@
             </i>
 
             <ng-template #msg>
-              <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
-              <span class="message-name">{{ message.nick }}:</span>
+              <div class="message-info">
+                <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
+                <span class="message-name">{{ message.nick }}:</span>
+              </div>
               <p class="message-text" [innerHTML]="message.text"></p>
             </ng-template>
           </div>
@@ -27,7 +28,7 @@
 
         <div class="chat-controls">
           <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
-            <input type="text" formControlName="text">
+            <textarea type="text" formControlName="text" (keydown)="enterTextarea($event)"></textarea>
             <button class="btn" type="submit">Send</button>
           </form>
         </div>

@@ -23,8 +23,10 @@
 
   &-form {
     position: relative;
-      & input {
+      & textarea {
         padding-left: 10px;
+        padding-top: 12px;
+        padding-right: 55px;
         border: none;
         outline: none;
         box-sizing: border-box;
@@ -43,7 +45,7 @@
   }
 }
 
-input.ng-touched.ng-invalid{
+textarea.ng-touched.ng-invalid{
   background-color: #f7e5e5;
 }
 
@@ -74,11 +76,14 @@ input.ng-touched.ng-invalid{
     color: red;
   }
 
+
   &-text {
-    margin: 0;
+    margin-top: 19px;
+    margin-bottom: 0;
     padding-left: 5px;
     text-align: justify;
     color: green;
+    word-break: break-all;
 
     & img {
       width: 50%;
@@ -86,6 +91,12 @@ input.ng-touched.ng-invalid{
       position: absolute;
       top: 30px;
     }
+  }
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 

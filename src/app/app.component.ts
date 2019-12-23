@@ -17,11 +17,11 @@ export class AppComponent implements  OnInit{
 
   title = 'BrusChat';
   login:boolean = false;
-  nick:string = "";
+  userName:string = "";
   chatForm: FormGroup;
   messages: Message[] = [];
   disableScrollDown = false;
-  ioConnection: any;
+  isTyping: boolean;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -31,58 +31,51 @@ export class AppComponent implements  OnInit{
               private webSocketService: WebSocketService) {}
 
   ngOnInit() {
+    this.initForm();
     this.router.events.subscribe((event) => {
       if (!(event instanceof NavigationEnd)) {
         return;
       }
       const activated: ActivatedRoute[] = this.activatedRoute.root.children;
       this.login = activated[0].snapshot.data['login'];
-      this.nick = localStorage.getItem('userName');
     });
-    this.initForm();
-    this.authService.isLoggedIn().subscribe(status => {
-      if(status) {
-        this.initSocket();
-        this.registerDomEvents();
-        this.loadMessages();
-      }
-    });
+    // this.authService.isLoggedIn().subscribe(status => {
+    //   if(status) {
+    //     this.userName = this.authService.getUser();
+    //     this.initSocket(this.userName);
+    //     this.registerDomEvents();
+    //   }
+    // });
   }
 
-  initSocket(): void{
-    this.webSocketService.initSocket();
+  initSocket(userName){
+    this.webSocketService.initSocket(userName);
 
-    this.ioConnection = this.webSocketService.onMessage().subscribe((message:Message) => {
+    this.webSocketService.onConnect().subscribe( () => {
+      this.loadMessages();
+    });
+
+    this.webSocketService.onMessage().subscribe((message:Message) => {
       this.messages.push(message);
     });
 
-    this.webSocketService.onEvent('connect').subscribe(() =>{
-      console.log('connected');
-      this.webSocketService.send({
-        nick: this.nick,
-        text: 'connected',
-        action: 'connect'
-      });
-    });
   }
 
   loadMessages(){
-    // const uri = 'http://localhost:8080/api/messages';
+    // const uri = 'http://localhost:3001/api/messages';
     const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
-      this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
+      this.scrollToBottom();
     });
   }
 
   registerDomEvents(){
     window.addEventListener("beforeunload",  (event) => {
       this.authService.logout();
-      this.webSocketService.send({
-        nick: this.nick,
-        text: 'disconnected',
-        action: 'disconnect'
-      });
+    });
+    window.addEventListener('focus',  () => {
+      this.checkConnection();
     });
   }
 
@@ -92,6 +85,12 @@ export class AppComponent implements  OnInit{
     });
   }
 
+  checkConnection(){
+    if (this.webSocketService.socket.disconnected){
+      this.webSocketService.socket.connect();
+    }
+  }
+
   sendMessage() {
     const controls = this.chatForm.controls;
     if (this.chatForm.invalid) {
@@ -99,7 +98,7 @@ export class AppComponent implements  OnInit{
       return;
     }
     this.webSocketService.send({
-      nick: this.nick,
+      nick: this.userName,
       text: this.chatForm.value['text'],
       date: new Date()
     });
@@ -107,10 +106,16 @@ export class AppComponent implements  OnInit{
     this.scrollToBottom();
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
+  enterTextarea(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      this.sendMessage();
+    }
   }
 
+  ngAfterViewChecked() {
+    // this.scrollToBottom();
+  }
 
   public scrollToBottom(): void {
     try {
