@@ -4,25 +4,25 @@
 
 <ng-template [ngIf]="!login" [ngIfElse]="loading">
   <div class="chat">
-      <div class="chat-header">
-<!--        <img src="assets/images/logo.jpg" alt="">-->
+    <div class="user-box">
+
+    </div>
+      <div class="online-box">
+        <div class="online-header"><strong>Online</strong></div>
+        <ul class="list online-list">
+          <li class="online-user" *ngFor="let user of users">
+            <strong>{{ user }}</strong>
+          </li>
+        </ul>
       </div>
       <div class="chat-body">
         <div class="chat-content" #mbox>
           <div class="message" *ngFor="let message of messages">
-
-            <i class="message-action" *ngIf="message.action; else msg">
-              {{ message.nick }}
-              <span [class]="message.action">{{ message.text }}</span>
-            </i>
-
-            <ng-template #msg>
               <div class="message-info">
                 <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
                 <span class="message-name">{{ message.nick }}:</span>
               </div>
               <p class="message-text" [innerHTML]="message.text"></p>
-            </ng-template>
           </div>
         </div>
 

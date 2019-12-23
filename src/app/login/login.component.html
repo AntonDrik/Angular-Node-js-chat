@@ -4,7 +4,7 @@
     <mat-tab-group (selectedTabChange)="resetForm($event)">
       <mat-tab label="Login">
           <div class="login-form form">
-            <form [formGroup]="loginForm" (submit)="onSubmit(loginForm)">
+            <form [formGroup]="loginForm">
 
               <div class="form-label">
                 <div class="form-label-control">
@@ -29,13 +29,13 @@
               <div *ngIf="serverRes" class="notification" [ngClass]="{'success': serverRes.ok, 'error': !serverRes.ok}">
                 {{ serverRes.caption }}
               </div>
-              <button class="btn-reg-box btn-login" type="submit">Login</button>
+              <button class="btn-reg-box btn-login" type="submit" (click)="onSubmit(loginForm, $event)">Login</button>
             </form>
           </div>
       </mat-tab>
       <mat-tab label="Register">
           <div class="login-form form">
-            <form [formGroup]="registerForm" (submit)="onSubmit(registerForm)">
+            <form [formGroup]="registerForm">
 
               <div class="form-label">
                 <div class="form-label-control">
@@ -72,7 +72,9 @@
                 {{ serverRes.caption }}
               </div>
 
-              <button class="btn-reg-box btn-register" type="submit" [disabled]="registerForm.invalid">Register</button>
+              <button class="btn-reg-box btn-register" type="submit" [disabled]="registerForm.invalid" (click)="onSubmit(registerForm, $event)">
+                Register
+              </button>
             </form>
           </div>
       </mat-tab>

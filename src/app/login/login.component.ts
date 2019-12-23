@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: FormGroup, e) {
     const controls = form.controls;
     if (form.invalid) {
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
@@ -82,40 +82,14 @@ export class LoginComponent implements OnInit {
       setTimeout(() => {this.isWrongCred = false;},2000);
       return;
     }
+    e.target.disabled = true;
     const data = form.value;
     //login
     if (form === this.loginForm) {
-      this.authService.isLoggedIn().then(status =>{
-        if (!status) {
-          this.authService.login(data).then(response => {
-            this.serverRes = response;
-          });
-        }
-      });
-      // this.authService.login(data).subscribe((data: Response) => {
-      //
-      // })
-      // let promise = new Promise((res, rej) => {
-      //   this.authService.login(data).subscribe((data: Response) => {
-      //     res(data);
-      //   });
-      // });
-      // promise.then((result: Response) => {
-      //   this.authService.isLoggedIn().subscribe(status => {
-      //     this.serverRes = result;
-      //     if (!status && result.ok) {
-      //       this.authService.status.next(true);
-      //       localStorage.setItem('isLoggedIn', 'true');
-      //       localStorage.setItem('userName', form.value['login']);
-      //       this.router.navigate(['/chat']);
-      //     }
-      //   });
-      // }).catch(err => {
-      //   this.serverRes = {
-      //     ok: false,
-      //     caption: 'Ошибка входа. Попробуйте позже!'
-      //   }
-      // })
+        this.authService.login(data).then(response => {
+          this.serverRes = response;
+          e.target.disabled = false;
+        })
     }
     //register
     else {

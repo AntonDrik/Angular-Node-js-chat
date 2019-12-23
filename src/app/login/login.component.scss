@@ -112,6 +112,12 @@
   color: white;
   font-size: 20px;
   font-family: SFProRegular;
+
+  &[disabled] {
+    background-color: #bfbfbf;
+    border: 1px solid #a7a7a7;
+    color: #4a4949;
+  }
 }
 
 .btn-login {
@@ -122,12 +128,6 @@
 .btn-register {
   background-color: #bd4040;
   border: 1px solid #6d0404;
-
-  &[disabled] {
-    background-color: #ababab;
-    border: 1px solid #777676;
-    color: #4a4949;
-  }
 }
 
 .notification {
@@ -162,8 +162,8 @@
     background-image: url(/assets/images/message-success.png);
     width: 20px;
     height: 20px;
-    left: 10px;
-    top: 8px;
+    left: 14px;
+    top: 9px;
   }
 }
 

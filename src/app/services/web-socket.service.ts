@@ -14,7 +14,11 @@ export class WebSocketService {
   constructor() {}
 
   initSocket(userName){
-    // this.socket = io(this.SERVER_URL, {
+    this.socket = io(this.SERVER_URL, {
+      reconnection: false,
+      query: `userName=${userName}`
+    });
+    // this.socket = io({
     //   reconnection: false,
     //   query: `userName=${userName}`
     // });
@@ -23,6 +27,12 @@ export class WebSocketService {
   onMessage(): Observable<Message>{
     return new Observable<Message>(subscriber => {
       this.socket.on('message', (data:Message) => subscriber.next(data));
+    })
+  }
+
+  onOnlineUsers():Observable<any> {
+    return new Observable<any>(subscriber => {
+      this.socket.on('updateUsers', data => subscriber.next(data));
     })
   }
 

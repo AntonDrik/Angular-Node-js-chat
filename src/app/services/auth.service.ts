@@ -10,10 +10,10 @@ import {Router} from "@angular/router";
 
 export class AuthService {
 
-  // readonly SERVER_URL_REG: string = 'http://localhost:3001/api/register';
-  // readonly SERVER_URL_LOG: string = 'http://localhost:3001/api/login';
-  readonly SERVER_URL_REG: string = '/api/register';
-  readonly SERVER_URL_LOG: string = '/api/login';
+  readonly SERVER_URL_REG: string = 'http://localhost:3001/api/register';
+  readonly SERVER_URL_LOG: string = 'http://localhost:3001/api/login';
+  // readonly SERVER_URL_REG: string = '/api/register';
+  // readonly SERVER_URL_LOG: string = '/api/login';
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -23,33 +23,24 @@ export class AuthService {
     return this.http.post(this.SERVER_URL_REG, data);
   }
 
-  public isLoggedIn(): Promise<boolean> {
-    return new Promise<boolean>(ok => {
-      this.status.subscribe(status => ok(status));
-    })
+  public isLoggedIn(): Observable<boolean> {
+    return this.status.asObservable();
   }
-
-  // public isLoggedIn(): Observable<boolean> {
-  //     return this.status.asObservable();
-  // }
 
   getUser(): string {
     return localStorage.getItem('userName');
   }
 
   login(value): Promise<Response> {
-    return new Promise<Response>(ok => {
+    return new Promise<Response>((res) => {
       this.http.post(this.SERVER_URL_LOG, value).subscribe((data: Response) => {
-        console.log(data);
         if (data.ok) {
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('userName', value.login);
+          this.status.next(true);
           this.router.navigate(['/chat']);
-          ok(data);
         }
-        else {
-          ok(data);
-        }
+        res(data);
       });
     });
   }

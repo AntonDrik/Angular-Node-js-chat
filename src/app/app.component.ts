@@ -20,6 +20,8 @@ export class AppComponent implements  OnInit{
   userName:string = "";
   chatForm: FormGroup;
   messages: Message[] = [];
+  notifications: Notification[] = [];
+  users: [] = [];
   disableScrollDown = false;
   isTyping: boolean;
 
@@ -39,13 +41,13 @@ export class AppComponent implements  OnInit{
       const activated: ActivatedRoute[] = this.activatedRoute.root.children;
       this.login = activated[0].snapshot.data['login'];
     });
-    // this.authService.isLoggedIn().subscribe(status => {
-    //   if(status) {
-    //     this.userName = this.authService.getUser();
-    //     this.initSocket(this.userName);
-    //     this.registerDomEvents();
-    //   }
-    // });
+    this.authService.isLoggedIn().subscribe(status => {
+      if(status) {
+        this.userName = this.authService.getUser();
+        this.initSocket(this.userName);
+        this.registerDomEvents();
+      }
+    });
   }
 
   initSocket(userName){
@@ -59,11 +61,14 @@ export class AppComponent implements  OnInit{
       this.messages.push(message);
     });
 
+    this.webSocketService.onOnlineUsers().subscribe(users => {
+      this.users = users;
+    });
   }
 
   loadMessages(){
-    // const uri = 'http://localhost:3001/api/messages';
-    const uri = '/api/messages';
+    const uri = 'http://localhost:3001/api/messages';
+    // const uri = '/api/messages';
     this.http.get(uri).subscribe((data:[]) => {
       this.messages = data.reverse();
       this.scrollToBottom();
@@ -74,21 +79,12 @@ export class AppComponent implements  OnInit{
     window.addEventListener("beforeunload",  (event) => {
       this.authService.logout();
     });
-    window.addEventListener('focus',  () => {
-      this.checkConnection();
-    });
   }
 
   initForm(){
     this.chatForm = this.fb.group({
       text: ['', [Validators.required]]
     });
-  }
-
-  checkConnection(){
-    if (this.webSocketService.socket.disconnected){
-      this.webSocketService.socket.connect();
-    }
   }
 
   sendMessage() {
@@ -99,14 +95,16 @@ export class AppComponent implements  OnInit{
     }
     this.webSocketService.send({
       nick: this.userName,
-      text: this.chatForm.value['text'],
-      date: new Date()
+      text: this.chatForm.value['text']
     });
     this.chatForm.reset();
     this.scrollToBottom();
   }
 
   enterTextarea(e) {
+    if (this.webSocketService.socket.disconnected){
+      this.webSocketService.socket.connect();
+    }
     if (e.keyCode === 13) {
       e.preventDefault();
       this.sendMessage();
@@ -118,9 +116,7 @@ export class AppComponent implements  OnInit{
   }
 
   public scrollToBottom(): void {
-    try {
       this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
-    } catch(err) { }
   }
 
 }
