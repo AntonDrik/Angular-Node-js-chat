@@ -3,7 +3,7 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {AuthService} from "./services/auth.service";
 import {WebSocketService} from "./services/web-socket.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Message} from "./interfaces/message";
+import {Message} from "./interfaces/Message";
 import {HttpClient} from "@angular/common/http";
 
 @Component({

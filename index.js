@@ -10,6 +10,7 @@ const path              = require('path');
 
 const port = process.env.PORT || 8080;
 const app = express();
+const users = [];
 let server = http.createServer(app);
 
 let io = socketIO(server, {

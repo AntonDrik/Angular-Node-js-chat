@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
-import {Response} from "../interfaces/response";
+import {Response} from "../interfaces/Response";
 
 @Component({
   selector: 'login',

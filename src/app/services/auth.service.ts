@@ -1,7 +1,7 @@
 import {BehaviorSubject, Observable} from "rxjs";
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Response} from "../interfaces/response";
+import {Response} from "../interfaces/Response";
 import {Router} from "@angular/router";
 
 @Injectable({
@@ -31,6 +31,7 @@ export class AuthService {
     return localStorage.getItem('userName');
   }
 
+  //should return Promise<User>
   login(value): Promise<Response> {
     return new Promise<Response>((res) => {
       this.http.post(this.SERVER_URL_LOG, value).subscribe((data: Response) => {
