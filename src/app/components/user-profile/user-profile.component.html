@@ -1,0 +1,60 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title class="user-profile__title">{{ user.nick }} profile</h2>
+  <span [mat-dialog-close]="true">&times;</span>
+</div>
+
+<ng-template [ngIf]="isEditable" [ngIfElse]="loading">
+  <form [formGroup]="userProfileForm">
+    <mat-dialog-content>
+
+      <!--notifications-->
+      <div class="notification error" *ngIf="nick.errors?.maxlength">Длина не более 10 символов</div>
+      <div *ngIf="serverRes" class="notification" [ngClass]="{'success': serverRes.ok, 'error': !serverRes.ok}">
+        {{ serverRes.caption }}
+      </div>
+
+        <div class="user-profile-container">
+          <div class="user-profile-left">
+            <avatar-upload formControlName="avatar" [imgURL]="user.avatar"></avatar-upload>
+          </div>
+          <div class="user-profile-right">
+            <div class="user-profile__username">
+              <mat-form-field>
+                <input matInput placeholder="nick" formControlName="nick">
+              </mat-form-field>
+            </div>
+            <div class="user-profile__status">
+              <mat-form-field>
+                <input matInput placeholder="Status" formControlName="status">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button type="submit" class="btn form-btn btn-edit" (click)="onSubmit(userProfileForm)">
+        <img src="assets/images/edit-profile.png" width="15" alt="">
+      </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+
+<ng-template #loading>
+  <mat-dialog-content>
+    <div class="user-profile-container">
+      <div class="user-profile-right">
+        <div class="user-profile__avatar">
+          <img [src]="user.avatar" alt="">
+        </div>
+      </div>
+      <div class="user-profile-left">
+        <div class="user-profile__status">
+          <p>{{ user.status }}</p>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+

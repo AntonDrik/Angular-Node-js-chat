@@ -4,84 +4,59 @@ const bodyParser        = require('body-parser');
 const cors              = require('cors');
 const routes            = require('./routes');
 let http                = require('http');
-let socketIO            = require('socket.io');
-const Message           = require('./models/message');
-const path              = require('path');
+const SocketIO          = require('./sockets/root');
+const session           = require('express-session');
+const cookieParser      = require('cookie-parser');
+const MongoStore        = require('connect-mongo')(session);
+const config            = require('./helpers/config');
 
-const port = process.env.PORT || 8080;
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static(__dirname + '/dist/chat'));
-const users = [];
-let server = http.createServer(app);
 
-let io = socketIO(server, {
-  pingTimeout: 5000,
-  pingInterval: 5000
-});
 
-io.use((socket, next) => {
-  var userName = socket.request._query['userName'];
-  socket.userName = userName;
-  users.push(userName);
-  next();
-});
-app.use('/api', routes.messages);
-app.use('/api', routes.auth);
-app.get('/*', function(req,res) {
-  res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
-});
+//Database
+mongoose.Promise = global.Promise;
+// mongoose.set('debug', process.env.NODE_ENV === 'production');
+mongoose.connection
+  .on('error', error => console.log(error))
+  .on('close', () => console.log('Database connection closed.'))
+  .once('open', () => {
+    const info = mongoose.connections[0];
+    console.log(`Connected to ${info.host}:${info.port}/${info.name}`);
+  });
 
-mongoose.connect(
-  'mongodb+srv://AntonDrik:gjgjrfntgtnkm1245@bruschat-8kcu6.mongodb.net/chat',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
   .then((res) => {
-    io.on('connect', (socket) => {
+    //app
+    const app = express();
 
-      //connect
-      console.log(`[server](connect): ${socket.userName} connected`);
-      io.emit('updateUsers', users);
-
-      //disconnect
-      socket.on('disconnect', (reason) => {
-        setTimeout(() => {
-          console.log(`[server](disconnect): ${socket.userName} %s`,reason);
-          users.splice(users.indexOf(socket.userName), 1);
-          io.emit('updateUsers', users);
-        },1000);
-      });
-
-      //update users
-      socket.on('updateUsers', (data) => {
-        console.log('[server](notification): %s', JSON.stringify(data));
-        io.emit('updateUsers', data);
-      });
-
-      //send message
-      socket.on('message', (data) => {
-        console.log('[server](message): %s', JSON.stringify(data));
-        Message.create({
-          nick: data.nick,
-          text: data.text,
-          date: new Date()
-        }).then(msg => {
-          io.emit('message', {
-            nick: msg.nick,
-            text: msg.text,
-            date: msg.date
-          });
-        });
-
-      });
+    app.use(cors({origin: ["http://localhost:3000"], credentials: true}));
+    app.use(bodyParser.json());
+    app.use(cookieParser(config.COOKIE_SECRET));
+    app.use(express.urlencoded({ extended: true}));
+    app.use(express.static(__dirname + '/dist/chat'));
+    app.use(session({
+      name: config.COOKIE_NAME,
+      secret: config.COOKIE_SECRET,
+      resave: true,
+      saveUninitialized: false,
+      cookie: config.COOKIE_CONFIG,
+      store: new MongoStore({
+        mongooseConnection: mongoose.connection
+      })
+    }));
+    app.use('/auth', routes.auth);
+    app.use('/api', routes.api);
+    app.get('/*', function(req,res) {
+      res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
     });
 
-    server.listen(port, () => {
-      console.log('Server started at port: '+ port);
+    //init socket
+    let server = http.createServer(app);
+    SocketIO.initSocket(server);
+    SocketIO.addListeners();
+    server.listen(config.PORT, () => {
+      console.log('Server started at port: '+ config.PORT);
     });
   })
   .catch((e) => console.log(e));
+// io.path('/chat');
+// const publicRoom = io.of('/chat');

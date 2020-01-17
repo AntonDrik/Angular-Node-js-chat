@@ -1,12 +1,6 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {AuthService} from "./services/auth.service";
-import {WebSocketService} from "./services/web-socket.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Message} from "./interfaces/Message";
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {UserService} from "./services/user.service";
-import {User} from "./interfaces/User";
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -15,113 +9,8 @@ import {User} from "./interfaces/User";
 })
 export class AppComponent implements  OnInit{
 
-  @ViewChild('mbox', {static: false}) private mbox: ElementRef;
+  constructor() {}
 
-  title = 'BrusChat';
-  login:boolean = false;
-  userName:string = "";
-  chatForm: FormGroup;
-  currUser: User;
-  messages: Message[] = [];
-  // notifications: Notification[] = [];
-  users: [] = [];
-  disableScrollDown = false;
-  isTyping: boolean;
-
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private authService: AuthService,
-              private fb: FormBuilder,
-              private http: HttpClient,
-              private webSocketService: WebSocketService,
-              private userService: UserService) {}
-
-  ngOnInit() {
-    this.initForm();
-    this.router.events.subscribe((event) => {
-      if (!(event instanceof NavigationEnd)) {
-        return;
-      }
-      const activated: ActivatedRoute[] = this.activatedRoute.root.children;
-      this.login = activated[0].snapshot.data['login'];
-    });
-    this.authService.isLoggedIn().subscribe(status => {
-      if(status) {
-        this.currUser = this.userService.currentUser;
-        this.initSocket(this.currUser.login);
-        this.registerDomEvents();
-      }
-    });
-  }
-
-  initSocket(userName){
-    this.webSocketService.initSocket(userName);
-
-    this.webSocketService.onConnect().subscribe( () => {
-      this.loadMessages();
-    });
-
-    this.webSocketService.onMessage().subscribe((message:Message) => {
-      this.messages.push(message);
-    });
-
-    this.webSocketService.onOnlineUsers().subscribe(users => {
-      this.users = users;
-    });
-  }
-
-  loadMessages(){
-    // const uri = 'http://localhost:3001/api/messages';
-    const uri = '/api/messages';
-    console.log(uri);
-    this.http.get(uri).subscribe((data:[]) => {
-      this.messages = data.reverse();
-      this.scrollToBottom();
-    });
-  }
-
-  registerDomEvents(){
-    window.addEventListener("beforeunload",  (event) => {
-      this.authService.logout();
-    });
-  }
-
-  initForm(){
-    this.chatForm = this.fb.group({
-      text: ['', [Validators.required]]
-    });
-  }
-
-  sendMessage() {
-    const controls = this.chatForm.controls;
-    if (this.chatForm.invalid) {
-      Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
-      return;
-    }
-    this.webSocketService.send({
-      nick: this.userName,
-      text: this.chatForm.value['text']
-    });
-    this.chatForm.reset();
-    this.scrollToBottom();
-  }
-
-  enterTextarea(e) {
-    if (this.webSocketService.socket.disconnected){
-      this.webSocketService.socket.connect();
-    }
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      this.sendMessage();
-    }
-  }
-
-  ngAfterViewChecked() {
-    // this.scrollToBottom();
-  }
-
-  public scrollToBottom(): void {
-      this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
-  }
+  ngOnInit() {}
 
 }

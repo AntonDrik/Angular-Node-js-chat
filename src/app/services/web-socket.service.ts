@@ -1,26 +1,38 @@
-import { Injectable } from '@angular/core';
-import * as io from 'socket.io-client';
-import {Observable} from "rxjs";
-import {Message} from "../interfaces/Message";
+import { Injectable }   from '@angular/core';
+import * as io          from 'socket.io-client';
+import {Observable}     from "rxjs";
+import {Message}        from "../interfaces/Message";
+import {environment}    from "../../environments/environment";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class WebSocketService {
 
   public socket: any;
-  readonly SERVER_URL: string = 'http://localhost:3001';
 
   constructor() {}
 
-  initSocket(userName){
-    // this.socket = io(this.SERVER_URL, {
+  initSocket(userID, userName): void {
+    this.socket = io(environment.SERVER_URL_IO, {
+      reconnection: false,
+      query: {userID, userName}
+    });
+    // this.socket = io({
     //   reconnection: false,
     //   query: `userName=${userName}`
     // });
   }
 
-  onMessage(): Observable<Message>{
+  connectSocket(): void {
+    this.socket.connect();
+  }
+
+  disconnectSocket(): void {
+    if (this.socket && this.socket.connected) {
+      this.socket.disconnect();
+    }
+  }
+
+  onMessage(): Observable<Message> {
     return new Observable<Message>(subscriber => {
       this.socket.on('message', (data:Message) => subscriber.next(data));
     })

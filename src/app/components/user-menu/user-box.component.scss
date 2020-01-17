@@ -1,0 +1,73 @@
+::ng-deep.mat-menu-panel {
+  width: 200px;
+  background-color: white;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  padding: 2px 10px 0 10px;
+  border-radius: 4px;
+  height: 100%;
+}
+.user {
+  &-box {
+    position: relative;
+  }
+  &-arrow {
+    background-image: url(/assets/images/arrow-down.png);
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  &-dropdown-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover,
+    &[aria-expanded="true"]{
+      background-color: white;
+      border-radius: 4px;
+    }
+
+    & img {
+      width: 30px;
+    }
+
+    & span {
+      margin-left: 5px;
+    }
+  }
+  &-menu {
+
+    &__header {
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+
+    &__list-wrapper {
+      margin-left: -9px;
+      margin-right: -9px;
+      border-top: 1px solid #e8e8e8;
+      padding-top: 8px;
+    }
+
+    &__item {
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+      & img {
+        padding-left: 5px;
+      }
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
+}

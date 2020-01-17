@@ -3,56 +3,96 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Response} from "../interfaces/Response";
 import {Router} from "@angular/router";
-import {User} from "../interfaces/User";
 import {UserService} from "./user.service";
+import {WebSocketService} from "./web-socket.service";
+import {environment} from "../../environments/environment";
+import * as jwt_decode from "jwt-decode";
+import {map, switchMap} from "rxjs/operators";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 
 export class AuthService {
 
-  // readonly SERVER_URL_REG: string = 'http://localhost:3001/api/register';
-  // readonly SERVER_URL_LOG: string = 'http://localhost:3001/api/login';
-  readonly SERVER_URL_REG: string = '/api/register';
-  readonly SERVER_URL_LOG: string = '/api/login';
+  status = new BehaviorSubject<boolean>(false);
 
   constructor(private router: Router,
               private http: HttpClient,
-              private userService: UserService) {}
-
-  status = new BehaviorSubject<boolean>(false);
+              private userService: UserService,
+              private webSocketService: WebSocketService) {}
 
   public register(data): Observable<any> {
-    return this.http.post(this.SERVER_URL_REG, data);
+    return this.http.post(environment.SERVER_URL_REG, data);
   }
 
-  public isLoggedIn(): Observable<boolean> {
-    return this.status.asObservable();
+  public isLoggedIn(): boolean {
+    return this.status.value;
   }
 
-  getUser(): string {
-    return localStorage.getItem('userName');
+  private initUser(data) {
+    this.webSocketService.initSocket(data.user.userID, data.user.nick);
+    this.userService.currentUser = data.user;
+    // this.userService.accessToken = data.accessToken;
+    this.status.next(true);
   }
+
+  // public checkToken(): Promise<any> {
+  //   return new Promise<any>(res => {
+  //     this.http.get(environment.SERVER_URL_TOKEN_CHECK_ACCESS).subscribe((data:Response) => {
+  //       if(data.ok) {
+  //         const token = jwt_decode(data.accessToken);
+  //         this.initUser(data, token);
+  //       }
+  //       res(data.ok);
+  //     });
+  //   });
+  // }
+
+  public checkSession(): Promise<any> {
+    return new Promise<any>(res => {
+      this.http.get(environment.SERVER_URL_CHECK_SESSION).subscribe((data: Response) => {
+        if(data.ok) {
+          this.initUser(data);
+        }
+        res(data.ok);
+      });
+    })
+  }
+
+  // public refreshToken(): Observable<any> {
+  //   const token = localStorage.getItem('refreshToken');
+  //     return this.http.post(environment.SERVER_URL_TOKEN_REFRESH, {token}).pipe(map((data: any) =>{
+  //       return data;
+  //     }))
+  // }
 
   login(value): Promise<Response> {
-    return new Promise<Response>((res) => {
-      this.http.post(this.SERVER_URL_LOG, value).subscribe((data:Response) => {
+    return new Promise<Response>(res => {
+      this.http.post(environment.SERVER_URL_LOGIN, value).subscribe((data:Response) => {
         if (data.ok) {
-          // localStorage.setItem('isLoggedIn', 'true');
-          // localStorage.setItem('userName', value.login);
-          this.userService.currentUser= data.user;
-          this.status.next(true);
-          this.router.navigate(['/chat']);
+          this.initUser(data);
+          // localStorage.setItem('refreshToken', data.refreshToken);
         }
         res(data);
+      }, error => {
+        res({
+          ok: false,
+          caption: 'Сервер временно недоступен!'
+        })
       });
-    });
+    })
   }
 
   logout(): void {
-    localStorage.setItem('isLoggedIn', 'false');
-    localStorage.removeItem('userName');
-    this.status.next(false);
+    this.http.get(environment.SERVER_URL_LOGOUT).subscribe((data:Response) => {
+      if(data.ok) {
+        this.webSocketService.disconnectSocket();
+        this.status.next(false);
+        this.router.navigate(['/login']);
+      }
+      else {
+        console.log(data.caption);
+      }
+    });
+
   }
 }

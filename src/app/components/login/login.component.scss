@@ -104,14 +104,7 @@
 }
 
 .btn-reg-box {
-  width: 100%;
   height: 50px;
-  outline: none;
-  cursor: pointer;
-  border-radius: 3px;
-  color: white;
-  font-size: 20px;
-  font-family: SFProRegular;
 
   &[disabled] {
     background-color: #bfbfbf;
@@ -128,43 +121,6 @@
 .btn-register {
   background-color: #bd4040;
   border: 1px solid #6d0404;
-}
-
-.notification {
-  padding: 10px 10px 10px 50px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  position: relative;
-
-  &:before {
-    content: "";
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    position: absolute;
-  }
-}
-
-.error {
-  background-color: #fbd3d2;
-  &:before {
-    background-image: url(/assets/images/message-error.png);
-    width: 24px;
-    height: 19px;
-    left: 11px;
-    top: 10px;
-  }
-}
-
-.success {
-  background-color: #d2fbd3;
-  &:before {
-    background-image: url(/assets/images/message-success.png);
-    width: 20px;
-    height: 20px;
-    left: 14px;
-    top: 9px;
-  }
 }
 
 @media (max-width: 576px) {

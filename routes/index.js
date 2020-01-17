@@ -1,4 +1,4 @@
-const messages = require('./message');
-const auth = require('./auth');
+const api       = require('./api');
+const auth      = require('./auth');
 
-module.exports = {messages, auth};
+module.exports = {api, auth};

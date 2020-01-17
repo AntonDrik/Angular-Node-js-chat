@@ -1,0 +1,20 @@
+<div class="user-box">
+  <div class="user-dropdown-btn" id="user-menu" [matMenuTriggerFor]="appMenu" (click)="reconnect()">
+    <img [src]="user?.avatar" alt="">
+    <span class="user-arrow"></span>
+  </div>
+  <mat-menu #appMenu="matMenu" xPosition="before" class="user-menu" [overlapTrigger]="false">
+    <div class="user-menu__header">
+      <strong>{{ user?.nick }}</strong>
+    </div>
+    <div class="user-menu__list-wrapper">
+      <ul class="list user-menu__list">
+        <li mat-menu-item class="user-menu__item" (click)="showProfile()">Edit Profile</li>
+        <li mat-menu-item class="user-menu__item" (click)="logout()">
+          Logout {{ user?.login }}
+          <img src="assets/images/exit.png" width="15" alt="">
+        </li>
+      </ul>
+    </div>
+  </mat-menu>
+</div>

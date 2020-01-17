@@ -1,46 +1,57 @@
 import {Injectable, NgModule} from '@angular/core';
-import {Routes, RouterModule, CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {Routes, RouterModule, CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from "./services/auth.service";
-import {Observable} from "rxjs";
-import {AppComponent} from "./app.component";
-import {LoginComponent} from "./login/login.component";
+import {LoginComponent} from "./components/login/login.component";
+import {ChatComponent} from "./components/chat/chat.component";
+import {getSortHeaderNotContainedWithinSortError} from "@angular/material/sort/typings/sort-errors";
+import has = Reflect.has;
+
 
 @Injectable()
 export class AuthGuard implements CanActivate{
 
   constructor(private authService: AuthService, private router: Router) {};
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    this.authService.isLoggedIn().subscribe(status => {
-      if (status) {
-        return true
-      }
-      this.router.navigate(['/login']);
-      return false;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+
+    return new Promise((res) => {
+      this.authService.checkSession().then(hasSession => {
+        if(!hasSession) {
+          this.router.navigate(['/login']);
+        }
+        res(hasSession);
+      })
+      // if(this.authService.isLoggedIn()) {
+      //   res(true)
+      // }
+      // else {
+      //   this.authService.checkToken().then(isValid => {
+      //     if(isValid) {
+      //       res(true)
+      //     }
+      //     else {
+      //       this.router.navigate(['/login']);
+      //       res(false);
+      //     }
+      //   });
+      // }
     });
-    return true;
+
   }
 }
 
 const routes: Routes = [
-  {
-    path: '', redirectTo: 'chat', pathMatch: 'full'
-  },
+  { path: '', redirectTo: 'chat', pathMatch: 'full' },
   {
     path: 'chat',
     canActivate: [AuthGuard],
-    component: AppComponent,
-    data: {
-      login: false
-    }
+    component: ChatComponent
   },
   {
     path: 'login',
-    component: LoginComponent,
-    data: {
-      login: true
-    }
-  }
+    component: LoginComponent
+  },
+  { path: '**', redirectTo: 'chat' }
 ];
 
 @NgModule({

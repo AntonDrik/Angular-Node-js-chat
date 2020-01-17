@@ -1,0 +1,41 @@
+::ng-deep.mat-form-field {
+  width: 100%;
+}
+.dialog-header {
+  position: relative;
+  & span {
+    position: absolute;
+    right: -10px;
+    font-size: 30px;
+    line-height: 25px;
+    top: -15px;
+    cursor: pointer;
+  }
+}
+.user-profile {
+  &-container {
+    display: flex;
+    padding-bottom: 5px;
+  }
+  &-right {
+    padding-left: 15px;
+  }
+  &__title {
+    text-align: center;
+    border-bottom: 1px solid #e8e8e8;
+    padding-bottom: 5px;
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  &__status {
+    width: 200px;
+  }
+}
+
+.btn-edit {
+  background-color: #fffbdd;
+  border: 1px solid rgba(27,31,35,.15);
+  width: 40px;
+}
+
+

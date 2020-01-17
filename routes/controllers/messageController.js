@@ -1,18 +1,13 @@
-const {Router}      = require('express');
-// const multer        = require("multer");
-const Message       = require('../models/message');
+const Message = require('../../models/message');
 
-const router = Router();
-
-router.get('/messages', (req,res) => {
-    // Message.deleteMany({});
+exports.getMessage = function (req, res) {
     Message.find({}).sort({ _id: -1 }).limit(20).exec(function (err, item) {
         if(err) return console.log(err);
         res.send(item);
     });
-});
+};
 
-// router.post('/messages/add', (req, res) => {
+exports.addMessage = function(req, res) {
 //     const {nick, text} = req.body;
 //     Message.create({
 //         nick,
@@ -24,6 +19,4 @@ router.get('/messages', (req,res) => {
 //             res.send(item);
 //         });
 //     });
-// });
-
-module.exports = router;
+};

@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {Response} from "../interfaces/Response";
-import {UserService} from "../services/user.service";
+import {Response} from "../../interfaces/Response";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'login',
@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       login: ['', [
         Validators.required,
-        Validators.pattern(/^\S*[A-z0-9]$/)
+        Validators.pattern(/^\S*[A-z0-9]$/),
+        Validators.maxLength(10)
       ]],
       password: ['', [
         Validators.required,
@@ -77,25 +78,34 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: FormGroup, e) {
     const controls = form.controls;
+
+    //Validation
     if (form.invalid) {
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
       this.isWrongCred = true;
       setTimeout(() => {this.isWrongCred = false;},2000);
       return;
     }
+
     e.target.disabled = true;
     const data = form.value;
-    //login
+
+    //Login
     if (form === this.loginForm) {
         this.authService.login(data).then(response => {
           this.serverRes = response;
           e.target.disabled = false;
-        })
+          if (response.ok) {
+            this.router.navigate(['/chat']);
+          }
+        }).catch(err => console.log(err));
     }
-    //register
+
+    //Register
     else {
       this.authService.register(data).subscribe((data: Response) => {
         this.serverRes = data;
+        e.target.disabled = false;
       });
     }
   }
