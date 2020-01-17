@@ -8,5 +8,5 @@ export const environment = {
   // SERVER_URL_TOKEN_CHECK_ACCESS:  'auth/checkToken',
   // SERVER_URL_TOKEN_REFRESH:       'auth/refreshToken',
   SERVER_URL_CHECK_SESSION:       'auth/checkSession',
-  SERVER_URL_MESSAGES:            'api/messages/get'
+  SERVER_URL_MESSAGES_GET:            'api/messages/get'
 };

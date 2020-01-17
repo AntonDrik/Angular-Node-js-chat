@@ -12,8 +12,8 @@ import {Response} from "../../interfaces/Response";
 })
 export class UserProfileComponent implements OnInit {
 
-  private user: User;
-  private isEditable: boolean = false;
+  isEditable: boolean = false;
+  user: User;
   userProfileForm: FormGroup;
   serverRes: Response;
 

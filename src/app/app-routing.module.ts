@@ -3,9 +3,6 @@ import {Routes, RouterModule, CanActivate, Router, ActivatedRouteSnapshot, Route
 import {AuthService} from "./services/auth.service";
 import {LoginComponent} from "./components/login/login.component";
 import {ChatComponent} from "./components/chat/chat.component";
-import {getSortHeaderNotContainedWithinSortError} from "@angular/material/sort/typings/sort-errors";
-import has = Reflect.has;
-
 
 @Injectable()
 export class AuthGuard implements CanActivate{

@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../../interfaces/User";
-import {UserService} from "../../services/user.service";
 import {AuthService} from "../../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {UserProfileComponent} from "../user-profile/user-profile.component";
