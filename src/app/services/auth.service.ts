@@ -29,6 +29,7 @@ export class AuthService {
   }
 
   private initUser(data) {
+    console.log(data);
     this.webSocketService.initSocket(data.user.userID, data.user.nick);
     this.userService.currentUser = data.user;
     // this.userService.accessToken = data.accessToken;

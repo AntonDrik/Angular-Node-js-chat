@@ -10,8 +10,6 @@ const cookieParser      = require('cookie-parser');
 const MongoStore        = require('connect-mongo')(session);
 const config            = require('./config');
 
-
-
 //Database
 mongoose.Promise = global.Promise;
 mongoose.set('debug', process.env.NODE_ENV === 'production');
