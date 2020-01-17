@@ -2,7 +2,7 @@ const {Router}      = require('express');
 const User          = require('../models/user');
 const bcrypt        = require('bcrypt-nodejs');
 // const jwt           = require('jsonwebtoken');
-const config        = require('../helpers/config');
+const config        = require('../config');
 
 const router = Router();
 

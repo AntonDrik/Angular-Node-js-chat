@@ -8,13 +8,13 @@ const SocketIO          = require('./sockets/root');
 const session           = require('express-session');
 const cookieParser      = require('cookie-parser');
 const MongoStore        = require('connect-mongo')(session);
-const config            = require('./helpers/config');
+const config            = require('./config');
 
 
 
 //Database
 mongoose.Promise = global.Promise;
-// mongoose.set('debug', process.env.NODE_ENV === 'production');
+mongoose.set('debug', process.env.NODE_ENV === 'production');
 mongoose.connection
   .on('error', error => console.log(error))
   .on('close', () => console.log('Database connection closed.'))

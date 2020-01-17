@@ -1,5 +1,5 @@
 const {Router}      = require('express');
-const config        = require('../helpers/config');
+const config        = require('../config');
 // const jwt           = require('express-jwt');
 const router        = Router();
 
