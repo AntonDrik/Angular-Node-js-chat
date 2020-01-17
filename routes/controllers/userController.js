@@ -1,6 +1,7 @@
 const User          = require('../../models/user');
 const multer        = require('multer');
 const OnlineUsers   = require('../../helpers/OnlineUsers');
+const {rootSocket}    = require('../../sockets/root');
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) =>{
