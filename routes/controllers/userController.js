@@ -3,11 +3,11 @@ const multer        = require('multer');
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) =>{
-        cb(null, "uploads");
+        cb(null, "../../uploads");
     },
     filename: (req, file, cb) => {
-        // const login = req.session.login;
-        cb(null, Date.now().toString());
+        const login = req.session.login;
+        cb(null, login+Date.now().toString());
     }
 });
 
@@ -40,34 +40,34 @@ exports.editUser = function (req, res) {
     const {userID ,nick, nickIsEdited, status} = req.body;
     console.log(req.file);
     console.log(req.body);
-    // User.findOne({nick}).then(user =>{
-    //     if(nickIsEdited && user) {
-    //         res.json({
-    //             ok: false,
-    //             user,
-    //             caption: 'Ник занят!'
-    //         })
-    //     }
-    //     else {
-    //         User.findOneAndUpdate({_id: userID}, {nick, status}, {new: true}).then(user => {
-    //             OnlineUsers.update(rootSocket.io);
-    //             res.json({
-    //                 ok: true,
-    //                 caption: 'Информация обновлена',
-    //                 user: {
-    //                     userID: user._id,
-    //                     nick: user.nick,
-    //                     registrationDate: user.registrationDate,
-    //                     avatar: user.avatar,
-    //                     status: user.status
-    //                 }
-    //             })
-    //         })
-    //     }
-    // }).catch(err => {
-    //     res.json({
-    //         ok: false,
-    //         caption: 'Ошибка обновления'
-    //     })
-    // });
+    User.findOne({nick}).then(user =>{
+        if(nickIsEdited && user) {
+            res.json({
+                ok: false,
+                user,
+                caption: 'Ник занят!'
+            })
+        }
+        else {
+            User.findOneAndUpdate({_id: userID}, {nick, status}, {new: true}).then(user => {
+                OnlineUsers.update(rootSocket.io);
+                res.json({
+                    ok: true,
+                    caption: 'Информация обновлена',
+                    user: {
+                        userID: user._id,
+                        nick: user.nick,
+                        registrationDate: user.registrationDate,
+                        avatar: user.avatar,
+                        status: user.status
+                    }
+                })
+            })
+        }
+    }).catch(err => {
+        res.json({
+            ok: false,
+            caption: 'Ошибка обновления'
+        })
+    });
 };

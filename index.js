@@ -27,7 +27,7 @@ mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
     //app
     const app = express();
 
-    app.use(cors({origin: ["http://localhost:4200"], credentials: true}));
+    app.use(cors({credentials: true}));
     app.use(bodyParser.json());
     app.use(cookieParser(config.COOKIE_SECRET));
     app.use(express.urlencoded({ extended: true}));

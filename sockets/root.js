@@ -13,7 +13,6 @@ function initSocket(server) {
     });
 
     rootSocket.io.use((socket, next) => {
-        console.log(`HANDSHAKE: ${socket.handshake.query}`);
         const userID = socket.handshake.query.userID;
         const nick = socket.handshake.query.userName;
         socket.userID = userID;
