@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  SERVER_URL:                     'http://localhost:3000',
   SERVER_URL_IO:                  'http://localhost:3000',
   SERVER_URL_REG:                 'http://localhost:3000/auth/register',
   SERVER_URL_LOGIN:               'http://localhost:3000/auth/login',
@@ -12,7 +11,9 @@ export const environment = {
   // SERVER_URL_TOKEN_REFRESH:       'http://localhost:3000/auth/refreshToken',
   // SERVER_URL_TOKEN_CHECK_ACCESS:  'http://localhost:3000/auth/checkToken',
   SERVER_URL_CHECK_SESSION:       'http://localhost:3000/auth/checkSession',
-  SERVER_URL_MESSAGES_GET:        'http://localhost:3000/api/messages/get'
+  SERVER_URL_MESSAGES_GET:        'http://localhost:3000/api/messages/get',
+  SERVER_URL_USER_GET:            'http://localhost:3000/api/user',
+  SERVER_URL_USER_EDIT:           'http://localhost:3000/api/user/edit'
 };
 
 /*

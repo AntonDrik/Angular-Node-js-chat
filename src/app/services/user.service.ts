@@ -13,7 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUser(userID): Promise<User> {
-    const URL = `${environment.SERVER_URL}/api/user/${userID}`;
+    const URL = `${environment.SERVER_URL_USER_GET}/${userID}`;
     return new Promise((res, rej) => {
       this.http.get(URL).subscribe((data: Response) => {
         (data.ok) ? res(data.user) : rej(data.caption);
@@ -24,10 +24,9 @@ export class UserService {
   }
 
   updateUser(data): Promise<Response> {
-    const URL =  `${environment.SERVER_URL}/api/user/edit`;
     data.userID = this.currentUser.userID;
     return new Promise((res, rej) => {
-      this.http.post(URL, data).subscribe((data: Response) => {
+      this.http.post(environment.SERVER_URL_USER_EDIT, data).subscribe((data: Response) => {
         if (data.ok) {
           this.currentUser = data.user;
           res(data);

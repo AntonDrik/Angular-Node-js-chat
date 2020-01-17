@@ -9,6 +9,7 @@ const session           = require('express-session');
 const cookieParser      = require('cookie-parser');
 const MongoStore        = require('connect-mongo')(session);
 const config            = require('./config');
+const path              = require('path');
 
 //Database
 mongoose.Promise = global.Promise;
@@ -26,7 +27,7 @@ mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
     //app
     const app = express();
 
-    app.use(cors({credentials: true}));
+    app.use(cors({origin: ["http://localhost:4200"], credentials: true}));
     app.use(bodyParser.json());
     app.use(cookieParser(config.COOKIE_SECRET));
     app.use(express.urlencoded({ extended: true}));
