@@ -28,11 +28,11 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.loginForm = this.formBuilder.group({
-      login: ['newUser', [
+      login: ['', [
         Validators.required,
         Validators.pattern(/^\S*[A-z0-9]$/)
       ]],
-      password: ['123123', [
+      password: ['', [
         Validators.required
       ]]
     });
