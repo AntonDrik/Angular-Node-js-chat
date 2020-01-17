@@ -1,5 +1,6 @@
 const User          = require('../../models/user');
 const multer        = require('multer');
+const OnlineUsers   = require('../../helpers/OnlineUsers');
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) =>{
@@ -40,34 +41,42 @@ exports.editUser = function (req, res) {
     const {userID ,nick, nickIsEdited, status} = req.body;
     console.log(req.file);
     console.log(req.body);
-    User.findOne({nick}).then(user =>{
+    if(req.body) {
+      User.findOne({nick}).then(user =>{
         if(nickIsEdited && user) {
-            res.json({
-                ok: false,
-                user,
-                caption: 'Ник занят!'
-            })
+          res.json({
+            ok: false,
+            user,
+            caption: 'Ник занят!'
+          })
         }
         else {
-            User.findOneAndUpdate({_id: userID}, {nick, status}, {new: true}).then(user => {
-                OnlineUsers.update(rootSocket.io);
-                res.json({
-                    ok: true,
-                    caption: 'Информация обновлена',
-                    user: {
-                        userID: user._id,
-                        nick: user.nick,
-                        registrationDate: user.registrationDate,
-                        avatar: user.avatar,
-                        status: user.status
-                    }
-                })
+          User.findOneAndUpdate({_id: userID}, {nick, status}, {new: true}).then(user => {
+            OnlineUsers.update(rootSocket.io);
+            res.json({
+              ok: true,
+              caption: 'Информация обновлена',
+              user: {
+                userID: user._id,
+                nick: user.nick,
+                registrationDate: user.registrationDate,
+                avatar: user.avatar,
+                status: user.status
+              }
             })
+          })
         }
-    }).catch(err => {
+      }).catch(err => {
         res.json({
-            ok: false,
-            caption: 'Ошибка обновления'
+          ok: false,
+          caption: 'Ошибка обновления'
         })
-    });
+      });
+    }
+    else {
+      res.json({
+        ok: false,
+        caption: 'No Data'
+      })
+    }
 };
