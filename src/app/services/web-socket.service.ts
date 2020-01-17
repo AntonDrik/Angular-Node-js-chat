@@ -12,6 +12,7 @@ export class WebSocketService {
   constructor() {}
 
   initSocket(userID, userName): void {
+    console.log(`InitSocket: ${userID}, ${userName}`)
     this.socket = io(environment.SERVER_URL_IO, {
       reconnection: false,
       query: {userID, userName}
