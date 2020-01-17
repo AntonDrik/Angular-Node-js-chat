@@ -29,7 +29,7 @@ router.get('/messages/get', messageController.getMessage);
 router.get('/messages/add', messageController.addMessage);
 
 // USER ROUTES
-router.get('/user/:userID', userController.getUser);
+router.get('/user/get/:userID', userController.getUser);
 router.post('/user/edit', userController.upload, userController.editUser);
 
 

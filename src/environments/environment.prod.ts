@@ -8,6 +8,6 @@ export const environment = {
   // SERVER_URL_TOKEN_REFRESH:       'auth/refreshToken',
   SERVER_URL_CHECK_SESSION:       'auth/checkSession',
   SERVER_URL_MESSAGES_GET:        'api/messages/get',
-  SERVER_URL_USER_GET:            'api/user',
+  SERVER_URL_USER_GET:            'api/user/get',
   SERVER_URL_USER_EDIT:           'api/user/edit'
 };

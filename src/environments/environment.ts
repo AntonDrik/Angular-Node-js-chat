@@ -12,7 +12,7 @@ export const environment = {
   // SERVER_URL_TOKEN_CHECK_ACCESS:  'http://localhost:3000/auth/checkToken',
   SERVER_URL_CHECK_SESSION:       'http://localhost:3000/auth/checkSession',
   SERVER_URL_MESSAGES_GET:        'http://localhost:3000/api/messages/get',
-  SERVER_URL_USER_GET:            'http://localhost:3000/api/user',
+  SERVER_URL_USER_GET:            'http://localhost:3000/api/user/get',
   SERVER_URL_USER_EDIT:           'http://localhost:3000/api/user/edit'
 };
 
