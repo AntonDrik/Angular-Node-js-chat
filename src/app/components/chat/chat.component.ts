@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit {
 
   initSocket(){
     this.webSocketService.onConnect().subscribe( () => {
-      this.loadMessages();
+//       this.loadMessages();
     });
 
     this.webSocketService.onDisconnect().subscribe((reason) => {
