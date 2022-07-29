@@ -1,8 +1,13 @@
+.container {
+  height: 100%
+}
+
 .chat {
-  width: 600px;
+  width: 800px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
-  margin-top: 20px;
 
   &-header {
     display: flex;
@@ -13,11 +18,14 @@
   }
 
   &-body {
-    margin-top: 20px;
+    height: calc(100% - 115px);
+    display: flex;
+    flex-direction: column;
   }
 
   &-form {
     position: relative;
+
     & textarea {
       padding-left: 10px;
       padding-top: 12px;
@@ -33,9 +41,8 @@
   }
 
   &-content {
-    height: 400px;
     background-color: #eff7e7;
-    border-radius: 7px 7px 0 0;
+    border-radius: 0;
     overflow-y: scroll;
   }
 }
@@ -43,17 +50,17 @@
 .online {
   &-box {
     width: 100%;
-    * {
-      font-family: SFProRegular;
-    }
   }
+
   &-header {
     text-align: center;
     font-size: 16px;
   }
+
   &-list {
     margin-top: 10px;
   }
+
   &-user {
     display: inline-block;
     padding-right: 10px;
@@ -62,7 +69,7 @@
 }
 
 .btn {
-  width: auto;
+  width: 100px;
   position: absolute;
   right: 0;
   cursor: pointer;
@@ -81,20 +88,17 @@
   }
 }
 
-textarea.ng-touched.ng-invalid{
+textarea.ng-touched.ng-invalid {
   background-color: #f7e5e5;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 900px) {
   .chat {
+    width: 100%;
     &-header {
       & img {
         width: 100%;
       }
-    }
-
-    &-body {
-      width: 100%;
     }
   }
 }

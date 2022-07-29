@@ -1,7 +1,7 @@
 const Message = require('../../models/message');
 
 exports.getMessage = function (req, res) {
-    Message.find({}).sort({ _id: -1 }).limit(20).exec(function (err, item) {
+    Message.find({}).sort({ _id: -1 }).limit(40).exec(function (err, item) {
         if(err) return console.log(err);
         res.send(item);
     });
