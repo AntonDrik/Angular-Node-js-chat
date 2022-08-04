@@ -1,18 +1,23 @@
-<div class="message">
+<div class="message-wrapper">
 
-  <div class="message-info">
-    <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
-    <span class="message-name"><b>{{ message.nick }}</b>:</span>
+  <div class="message-avatar">
+    <app-avatar [user]="message.user[0]"></app-avatar>
   </div>
 
-  <div class="message-content">
-    <p *ngIf="message.text" class="message-text" [innerHTML]="message.text"></p>
-    <img
-      class="message-img"
-      *ngIf="message.filePath"
-      src="{{filePath}}"
-      (click)="showImg()"
-      alt=""
-    >
+  <div class="message">
+    <div class="message-content">
+      <span class="message-name"><b>{{ message.user[0].nick }}</b></span>
+      <span class="message-time">   {{ message.date | date:'h:mm' }}</span>
+      <p *ngIf="message.text" class="message-text" [innerHTML]="message.text"></p>
+      <img
+        class="message-img"
+        *ngIf="message.filePath"
+        src="{{filePath}}"
+        (click)="showImg()"
+        alt=""
+      >
+    </div>
   </div>
 </div>
+
+

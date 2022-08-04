@@ -19,7 +19,7 @@
   <div class="chat-controls">
     <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
       <app-attach-input formControlName="file"></app-attach-input>
-      <input #inputElement placeholder="Сообщение" type="text" formControlName="text" (keyup)="handleChange($event)"/>
+      <input #inputElement placeholder="Сообщение" type="text" formControlName="text" (keyup)="handleChange()"/>
       <button class="btn" type="submit">Send</button>
       <app-spinner *ngIf="sendLoading"></app-spinner>
     </form>

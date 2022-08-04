@@ -134,7 +134,10 @@ router.get('/logout', (req, res) => {
 router.get('/checkSession', (req, res) => {
   if (req.signedCookies[config.COOKIE_NAME]) {
     const userID = req.session.userID;
-    User.findOne({_id: userID}).then(user => {
+    User.findOne({_id: userID}).then((user) => {
+      if (!user) {
+        return res.status(401).json({ok: false});
+      }
       res.json({
         ok: true,
         user: {

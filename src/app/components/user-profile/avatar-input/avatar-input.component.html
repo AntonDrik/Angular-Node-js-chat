@@ -1,5 +1,5 @@
 <div class="user-profile__avatar">
-  <img [src]="imgURL" alt="">
+  <img [src]="imgURL" (error)="handleError()" alt="">
 </div>
 <label  class="btn form-btn btn-avatar" for="avatar">Select avatar</label>
 <input id="avatar" type="file" accept='image/png,image/jpg,image/jpeg'>

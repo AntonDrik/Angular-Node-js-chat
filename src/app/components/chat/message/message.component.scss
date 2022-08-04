@@ -1,3 +1,9 @@
+.message-wrapper {
+  display: flex;
+  margin: 10px;
+  align-items: flex-start;
+}
+
 .message {
   display: flex;
   width: fit-content;
@@ -6,7 +12,7 @@
   padding: 5px 10px;
   position: relative;
   border-radius: .50rem;
-  margin: 10px;
+  margin-left: 10px;
   cursor: pointer;
   //background-color: #d9e3d0;
   background-color: white;
@@ -32,18 +38,15 @@
     font-size: 14px;
     padding-right: 5px;
     color: #6785a3;
+    margin-left: 10px;
   }
 
   &-name {
     color: #0e3489;
   }
 
-  &-content {
-    margin-left: 5px;
-  }
-
   &-text {
-    margin-top: 22px;
+    margin-top: 5px;
     margin-bottom: 0;
     text-align: justify;
     color: black;

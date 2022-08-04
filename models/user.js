@@ -25,7 +25,7 @@ const schema = new Schema({
   },
   avatar: {
     type: String,
-    required: false,
+    required: false
   },
   status: {
     type: String,

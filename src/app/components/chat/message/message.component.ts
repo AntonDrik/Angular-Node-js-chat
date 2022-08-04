@@ -17,6 +17,7 @@ export class MessageComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.message);
   }
 
   showImg() {

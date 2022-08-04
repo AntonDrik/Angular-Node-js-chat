@@ -1,6 +1,7 @@
+import {User} from './User';
+
 export interface Message {
-  userID: string;
-  nick: string;
+  user: User[];
   text: string;
   filePath?: any;
   date?: Date;

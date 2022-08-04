@@ -10,14 +10,17 @@ export class AvatarComponent implements OnInit {
 
   @Input() user: User;
 
+  path = '';
+
   constructor() {
   }
 
   ngOnInit() {
+    this.path = `avatar/${this.user.avatar}`;
   }
 
-  get avatarPath() {
-    return `avatar/${this.user.avatar}`;
+  handleError() {
+    this.path = 'assets/images/avatar-icon.png';
   }
 
 }

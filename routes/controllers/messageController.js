@@ -1,4 +1,5 @@
 const Message = require('../../models/message');
+const User = require('../../models/user');
 const multer = require('multer');
 const path = require('path');
 const {rootSocket} = require('../../sockets/root');
@@ -15,24 +16,37 @@ const storageConfig = multer.diskStorage({
 
 
 exports.getMessage = function (req, res) {
-  Message.find({}).sort({_id: -1}).limit(150).exec(function (err, item) {
-    if (err) return console.log(err);
-    res.send(item);
-  });
+  Message
+    .find({})
+    .populate('user', 'nick avatar')
+    .sort({_id: -1})
+    .limit(20)
+    .exec(function (err, item) {
+      res.send(item);
+    });
 };
 
 exports.upload = multer({storage: storageConfig}).single('file')
 
-exports.addMessage = function (req, res) {
+exports.addMessage = async function (req, res) {
 
-  const {userID, nick, text} = req.body;
+  const {userID, text} = req.body;
   const filePath = req.file ? req.file.filename : null;
-  const date = new Date();
 
-  Message
-    .create({userID, nick, text, date, filePath})
-    .then((message) => {
-      rootSocket.io.emit('message', message);
-      res.send();
-    });
+  const user = await User.findOne({_id: userID});
+  const message = new Message();
+  message.date = new Date();
+  message.text = text;
+  message.filePath = filePath;
+  message.user = user;
+  await message.save();
+  rootSocket.io.emit('message', {...message._doc, user: [user]});
+  res.send();
+
+  // Message.remove({}, () => {
+  //   User.remove({}, () => {
+  //     res.send();
+  //   })
+  // })
+
 };

@@ -25,6 +25,7 @@ mongoose.connection
 mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
   .then(() => {
 
+
     const app = express();
 
     app.use(cors({credentials: true}));

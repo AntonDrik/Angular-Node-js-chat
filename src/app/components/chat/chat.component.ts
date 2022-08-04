@@ -109,18 +109,13 @@ export class ChatComponent implements OnInit {
         this.chatForm.reset('text', {onlySelf: true});
         this.chatForm.reset('file', {onlySelf: true});
         this.attachFileService.clear();
-        // this.areaElementRef.nativeElement.focus();
         this.sendLoading = false;
       });
   }
 
-  handleChange(event: KeyboardEvent) {
+  handleChange() {
     if (this.webSocketService.socket.disconnected) {
       this.webSocketService.connectSocket();
-    }
-    if (event.code === 'Enter') {
-      event.stopPropagation();
-      this.sendMessage();
     }
   }
 
