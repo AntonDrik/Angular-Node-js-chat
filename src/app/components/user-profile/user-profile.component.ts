@@ -12,7 +12,7 @@ import {Response} from '../../interfaces/Response';
 })
 export class UserProfileComponent implements OnInit {
 
-  isEditable: boolean = false;
+  isEditable = false;
   user: User;
   userProfileForm: FormGroup;
   serverRes: Response;
@@ -62,15 +62,15 @@ export class UserProfileComponent implements OnInit {
       this.serverRes = {ok: false, caption: 'Форма не валидна'};
       return;
     }
-    // need FormData
+
     const formData = new FormData();
-    formData.append('nick', form.value['nick']);
+    formData.append('nick', form.value.nick);
     formData.append('userID', this.userService.currentUser.userID);
-    if (form.value['status'] !== this.userService.currentUser.status) {
-      formData.append('status', form.value['status']);
+    if (form.value.status !== this.userService.currentUser.status) {
+      formData.append('status', form.value.status);
     }
-    if (form.value['avatar'] !== null) {
-      formData.append('avatar', form.value['avatar']);
+    if (form.value.avatar !== null) {
+      formData.append('avatar', form.value.avatar);
     }
     this.userService.updateUser(formData).then((response: Response) => {
       this.serverRes = response;
@@ -81,6 +81,10 @@ export class UserProfileComponent implements OnInit {
 
   get nick(): any {
     return this.userProfileForm.get('nick');
-  };
+  }
+
+  get avatarPath() {
+    return `avatar/${this.user.avatar}`;
+  }
 
 }

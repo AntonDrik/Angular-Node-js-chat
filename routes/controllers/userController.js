@@ -9,8 +9,7 @@ const storageConfig = multer.diskStorage({
     cb(null, path.resolve('uploads'));
   },
   filename: (req, file, cb) => {
-    const login = req.session.login;
-    cb(null, new Date().valueOf().toString());
+    cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
 
@@ -38,36 +37,39 @@ exports.getUser = function (req, res) {
   })
 };
 
-exports.editUser = function (req, res) {
-  const {userID, nick, nickIsEdited, status} = req.body;
+exports.editUser = async function (req, res) {
+  const {userID, nick, status} = req.body;
   console.log(req.file);
   console.log(req.body);
-  if (req.body) {
-    User.findOne({nick}).then(user => {
-      if (nickIsEdited && user) {
-        res.json({ok: false, user, caption: 'Ник занят!'});
-      } else {
-        console.log('userID: ', userID);
-        User.findOneAndUpdate({_id: userID}, {nick, status}).then(user => {
-          OnlineUsers.update(rootSocket.io);
-          console.log(user);
-          res.json({
-            ok: true,
-            caption: 'Информация обновлена',
-            user: {
-              userID: user._id,
-              nick: user.nick,
-              registrationDate: user.registrationDate,
-              avatar: user.avatar,
-              status: user.status
-            }
-          })
-        })
-      }
-    }).catch(err => {
-      res.json({ok: false, caption: 'Ошибка обновления'})
-    });
-  } else {
-    res.json({ok: false, caption: 'No Data'})
+  if (!req.body) {
+    return res.json({ok: false, caption: 'Неверные данные'});
   }
+
+  const user = await User.findOne({nick});
+  if (String(user._id) !== String(userID)) {
+    return res.json({ok: false, user, caption: 'Ник занят!'});
+  }
+
+  const updateObject = {nick, status};
+  const avatarIsEdited = req.file && (user.avatar !== req.file.filename);
+  if (avatarIsEdited) {
+    updateObject.avatar = req.file.filename
+  }
+
+  User.findOneAndUpdate({_id: userID}, updateObject).then((user) => {
+    OnlineUsers.update(rootSocket.io);
+    res.json({
+      ok: true,
+      caption: 'Информация обновлена',
+      user: {
+        userID: user._id,
+        nick: user.nick,
+        registrationDate: user.registrationDate,
+        avatar: req.file.filename,
+        status: user.status
+      }
+    })
+  }).catch(() => {
+    res.json({ok: false, caption: 'Ошибка обновления'})
+  });
 };

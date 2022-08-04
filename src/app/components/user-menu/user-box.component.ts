@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {User} from "../../interfaces/User";
-import {AuthService} from "../../services/auth.service";
-import {MatDialog} from "@angular/material/dialog";
-import {UserProfileComponent} from "../user-profile/user-profile.component";
-import {WebSocketService} from "../../services/web-socket.service";
+import {User} from '../../interfaces/User';
+import {AuthService} from '../../services/auth.service';
+import {MatDialog} from '@angular/material/dialog';
+import {UserProfileComponent} from '../user-profile/user-profile.component';
+import {WebSocketService} from '../../services/web-socket.service';
 
 @Component({
   selector: 'user-box',
@@ -16,11 +16,13 @@ export class UserBoxComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private webSocketService: WebSocketService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  showProfile(){
+  showProfile() {
     let dialogRef = this.dialog.open(UserProfileComponent, {
       maxWidth: '800px',
       minWidth: '300px',
@@ -36,9 +38,13 @@ export class UserBoxComponent implements OnInit {
   }
 
   reconnect() {
-    if (this.webSocketService.socket.disconnected){
+    if (this.webSocketService.socket.disconnected) {
       this.webSocketService.connectSocket();
     }
+  }
+
+  get avatarPath() {
+    return `avatar/${this.user.avatar}`;
   }
 
 }

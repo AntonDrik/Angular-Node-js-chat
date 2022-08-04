@@ -3,17 +3,17 @@ import {NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: 'avatar-upload',
-  templateUrl: './avatar-upload.component.html',
-  styleUrls: ['./avatar-upload.component.scss'],
+  templateUrl: './avatar-input.component.html',
+  styleUrls: ['./avatar-input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: AvatarUploadComponent,
+      useExisting: AvatarInputComponent,
       multi: true
     }
   ]
 })
-export class AvatarUploadComponent implements OnInit {
+export class AvatarInputComponent implements OnInit {
 
   @Input() imgURL;
   onChange: Function;

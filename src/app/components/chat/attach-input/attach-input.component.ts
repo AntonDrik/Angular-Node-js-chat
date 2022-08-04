@@ -1,22 +1,22 @@
 import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {FileUploadService} from '../../../services/file-upload.service';
+import {AttachFileService} from '../../../services/attach-file.service';
 
 type Fn = (file: File) => void;
 
 @Component({
-  selector: 'app-attach-file',
-  templateUrl: './attach-file.component.html',
-  styleUrls: ['./attach-file.component.scss'],
+  selector: 'app-attach-input',
+  templateUrl: './attach-input.component.html',
+  styleUrls: ['./attach-input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: AttachFileComponent,
+      useExisting: AttachInputComponent,
       multi: true
     }
   ]
 })
-export class AttachFileComponent implements OnInit, ControlValueAccessor {
+export class AttachInputComponent implements OnInit, ControlValueAccessor {
 
   onChange: Fn;
   private file: File | null = null;
@@ -30,7 +30,7 @@ export class AttachFileComponent implements OnInit, ControlValueAccessor {
 
   constructor(
     private host: ElementRef<HTMLInputElement>,
-    private fileUploadService: FileUploadService
+    private fileUploadService: AttachFileService
   ) {
   }
 

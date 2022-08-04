@@ -6,7 +6,7 @@ import {environment} from '../../environments/environment';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
-export class FileUploadService {
+export class AttachFileService {
 
   private messageSource = new BehaviorSubject('');
   currentMessage = this.messageSource.asObservable();

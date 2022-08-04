@@ -34,6 +34,7 @@ mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
 
     app.use(express.static(__dirname + '/dist/chat'));
     app.use('/static', express.static('chat-files'));
+    app.use('/avatar', express.static('uploads'));
 
     app.use(session({
       name: config.COOKIE_NAME,

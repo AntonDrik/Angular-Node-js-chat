@@ -1,6 +1,6 @@
 <div class="user-box">
   <div class="user-dropdown-btn" id="user-menu" [matMenuTriggerFor]="appMenu" (click)="reconnect()">
-    <img [src]="user?.avatar" alt="">
+    <app-avatar [user]="user"></app-avatar>
     <span class="user-arrow"></span>
   </div>
   <mat-menu #appMenu="matMenu" xPosition="before" class="user-menu" [overlapTrigger]="false">

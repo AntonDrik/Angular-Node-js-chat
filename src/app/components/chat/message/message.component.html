@@ -1,10 +1,12 @@
 <div class="message">
+
   <div class="message-info">
     <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
-    <span class="message-name">{{ message.nick }}:</span>
+    <span class="message-name"><b>{{ message.nick }}</b>:</span>
   </div>
-  <div>
-    <p class="message-text" [innerHTML]="message.text"></p>
+
+  <div class="message-content">
+    <p *ngIf="message.text" class="message-text" [innerHTML]="message.text"></p>
     <img
       class="message-img"
       *ngIf="message.filePath"

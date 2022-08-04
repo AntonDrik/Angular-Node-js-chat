@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FileUploadService} from '../../../services/file-upload.service';
+import {AttachFileService} from '../../../services/attach-file.service';
 
 type Fn = (file: File) => void;
 
@@ -10,7 +10,7 @@ type Fn = (file: File) => void;
 })
 export class AttachPreviewComponent {
 
-  constructor(private fileUploadService: FileUploadService) {
+  constructor(private fileUploadService: AttachFileService) {
   }
 
   get src() {

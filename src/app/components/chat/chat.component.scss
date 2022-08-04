@@ -1,9 +1,14 @@
 .chat {
   max-width: 800px;
-  height: calc(100vh - 20px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 10px;
 
   &-header {
     display: flex;
+    align-items: center;
     padding: 10px;
     background-color: #ececec;
     width: 100%;
@@ -12,30 +17,48 @@
   }
 
   &-body {
-    height: calc(100% - 73px);
+    overflow: auto;
     display: flex;
     flex-direction: column;
+    background-image: url(https://web.telegram.org/k/assets/img/pattern.svg);
+    background-color: #859ead;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar {
+      width: 14px;
+      background-color: transparent;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+      background-color: #c2d7e3;
+    }
   }
 
   &-form {
     position: relative;
+    display: flex;
+    max-height: 40px;
 
-    & textarea {
-      padding: 13px 105px 0 45px;
+    & input {
+      flex: 6;
+      font-family: 'Poppins', sans-serif;
+      padding-left: 10px;
       border: none;
       outline: none;
-      box-sizing: border-box;
-      width: 100%;
-      height: 40px;
-      background-color: #e8e8e8;
-      border-radius: 0 0 7px 7px;
     }
-  }
-
-  &-content {
-    background-color: #eff7e7;
-    border-radius: 0;
-    overflow-y: scroll;
   }
 }
 
@@ -61,23 +84,14 @@
 }
 
 .btn {
-  width: 100px;
-  position: absolute;
-  right: 0;
+  flex: 1;
   cursor: pointer;
   border-radius: 0 0 7px 0;
   border: none;
-  height: 40px;
   outline: none;
-  background-color: #d08282;
-  transition: all 0.5s ease;
-  color: black;
-  font-size: 14px;
-
-  &:hover {
-    background-color: #945252;
-
-  }
+  background-color: #3390ec;
+  color: white;
+  font-size: 16px;
 }
 
 textarea.ng-touched.ng-invalid {
@@ -87,6 +101,7 @@ textarea.ng-touched.ng-invalid {
 @media (max-width: 900px) {
   .chat {
     width: 100%;
+    padding: 0;
 
     &-header {
       & img {

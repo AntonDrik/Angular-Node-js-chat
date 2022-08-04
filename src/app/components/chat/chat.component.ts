@@ -10,6 +10,7 @@ import {UserService} from '../../services/user.service';
 import {environment} from '../../../environments/environment';
 import {Howl} from 'howler';
 import {atLeastOne} from '../../helpers/validators/atLeastOne';
+import {AttachFileService} from '../../services/attach-file.service';
 
 @Component({
   selector: 'app-chat',
@@ -18,7 +19,7 @@ import {atLeastOne} from '../../helpers/validators/atLeastOne';
 })
 export class ChatComponent implements OnInit {
 
-  @ViewChild('areaElement', {static: true}) areaElementRef: ElementRef;
+  @ViewChild('inputElement', {static: true}) inputElementRef: ElementRef;
 
   sendLoading = false;
   chatForm: FormGroup;
@@ -31,13 +32,16 @@ export class ChatComponent implements OnInit {
     format: 'wav'
   });
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private authService: AuthService,
-              private fb: FormBuilder,
-              private http: HttpClient,
-              private webSocketService: WebSocketService,
-              private userService: UserService) {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private webSocketService: WebSocketService,
+    private userService: UserService,
+    private attachFileService: AttachFileService
+  ) {
     if (this.authService.isLoggedIn()) {
       this.initSocket();
       this.currUser = this.userService.currentUser;
@@ -102,8 +106,10 @@ export class ChatComponent implements OnInit {
     this.sendLoading = true;
     this.http.post(environment.SERVER_URL_MESSAGES_ADD, formData)
       .subscribe(() => {
-        this.chatForm.reset();
-        this.areaElementRef.nativeElement.focus();
+        this.chatForm.reset('text', {onlySelf: true});
+        this.chatForm.reset('file', {onlySelf: true});
+        this.attachFileService.clear();
+        // this.areaElementRef.nativeElement.focus();
         this.sendLoading = false;
       });
   }
