@@ -1,7 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Poppins', sans-serif }
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 
 .btn {
   width: 100%;
@@ -44,6 +54,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif }
 
 .error {
   background-color: #fbd3d2;
+
   &:before {
     background-image: url(/assets/images/message-error.png);
     width: 24px;
@@ -55,6 +66,7 @@ body { margin: 0; font-family: 'Poppins', sans-serif }
 
 .success {
   background-color: #d2fbd3;
+
   &:before {
     background-image: url(/assets/images/message-success.png);
     width: 20px;

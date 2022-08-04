@@ -5,6 +5,12 @@
   </div>
   <div>
     <p class="message-text" [innerHTML]="message.text"></p>
-    <img class="message-img" *ngIf="message.filePath" src="{{'static/' + message.filePath}}" alt="">
+    <img
+      class="message-img"
+      *ngIf="message.filePath"
+      src="{{filePath}}"
+      (click)="showImg()"
+      alt=""
+    >
   </div>
 </div>

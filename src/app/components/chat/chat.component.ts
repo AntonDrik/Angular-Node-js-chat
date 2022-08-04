@@ -9,6 +9,7 @@ import {WebSocketService} from '../../services/web-socket.service';
 import {UserService} from '../../services/user.service';
 import {environment} from '../../../environments/environment';
 import {Howl} from 'howler';
+import {atLeastOne} from '../../helpers/validators/atLeastOne';
 
 @Component({
   selector: 'app-chat',
@@ -17,8 +18,9 @@ import {Howl} from 'howler';
 })
 export class ChatComponent implements OnInit {
 
-  @ViewChild('mbox', {static: false}) private mbox: ElementRef;
+  @ViewChild('areaElement', {static: true}) areaElementRef: ElementRef;
 
+  sendLoading = false;
   chatForm: FormGroup;
   messages: Message[] = [];
   users: [] = [];
@@ -58,9 +60,6 @@ export class ChatComponent implements OnInit {
     this.webSocketService.onMessage().subscribe((message: Message) => {
       this.sound.play();
       this.messages.push(message);
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 100);
     });
 
     this.webSocketService.onOnlineUsers().subscribe(users => {
@@ -77,21 +76,17 @@ export class ChatComponent implements OnInit {
   loadMessages() {
     this.http.get(environment.SERVER_URL_MESSAGES_GET).subscribe((data: []) => {
       this.messages = data.reverse();
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 500);
     });
   }
 
   initForm() {
     this.chatForm = this.fb.group({
-      text: ['', [Validators.required]],
-      file: []
-    });
+      text: ['', Validators.minLength(1)],
+      file: [null]
+    }, {validator: atLeastOne(Validators.required, ['text', 'file'])});
   }
 
   sendMessage() {
-    console.log(this.chatForm.value);
     const currUser = this.userService.currentUser;
     const controls = this.chatForm.controls;
     if (this.chatForm.invalid) {
@@ -104,9 +99,12 @@ export class ChatComponent implements OnInit {
     formData.append('nick', currUser.nick);
     formData.append('text', this.chatForm.value.text);
     formData.append('file', this.chatForm.value.file);
+    this.sendLoading = true;
     this.http.post(environment.SERVER_URL_MESSAGES_ADD, formData)
       .subscribe(() => {
         this.chatForm.reset();
+        this.areaElementRef.nativeElement.focus();
+        this.sendLoading = false;
       });
   }
 
@@ -115,13 +113,9 @@ export class ChatComponent implements OnInit {
       this.webSocketService.connectSocket();
     }
     if (event.code === 'Enter') {
-      event.preventDefault();
+      event.stopPropagation();
       this.sendMessage();
     }
-  }
-
-  public scrollToBottom(): void {
-    this.mbox.nativeElement.scrollTop = this.mbox.nativeElement.scrollHeight;
   }
 
 }

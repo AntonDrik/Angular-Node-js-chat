@@ -11,9 +11,10 @@ import {MatInputModule} from '@angular/material/input';
 
 import {UserBoxComponent} from './components/user-menu/user-box.component';
 import {UserProfileComponent} from './components/user-profile/user-profile.component';
-import {MessageComponent} from './components/message/message.component';
+import {MessageComponent} from './components/chat/message/message.component';
 import {AvatarUploadComponent} from './components/common/avatar-upload/avatar-upload.component';
-import {FileUploadComponent} from './components/chat/file-upload/file-upload.component';
+import {AttachFileComponent} from './components/chat/attach-file/attach-file.component';
+import {SpinnerComponent} from './components/common/spinner/spinner.component';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './components/login/login.component';
 import {ChatComponent} from './components/chat/chat.component';
@@ -21,6 +22,8 @@ import {ChatComponent} from './components/chat/chat.component';
 import {JWTInterceptor} from './helpers/interceptors/JWT-interceptor.component';
 import {AuthService} from './services/auth.service';
 import {AppRoutingModule, AuthGuard} from './app-routing.module';
+import {AttachPreviewComponent} from './components/chat/attach-preview/attach-preview.component';
+import {DialogComponent} from './components/common/dialog/dialog.component';
 
 
 @NgModule({
@@ -32,10 +35,14 @@ import {AppRoutingModule, AuthGuard} from './app-routing.module';
     MessageComponent,
     AvatarUploadComponent,
     ChatComponent,
-    FileUploadComponent
+    AttachFileComponent,
+    AttachPreviewComponent,
+    SpinnerComponent,
+    DialogComponent
   ],
   entryComponents: [
-    UserProfileComponent
+    UserProfileComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,

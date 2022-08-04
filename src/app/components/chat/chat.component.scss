@@ -1,13 +1,6 @@
-.container {
-  height: 100%
-}
-
 .chat {
-  width: 800px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
+  max-width: 800px;
+  height: calc(100vh - 20px);
 
   &-header {
     display: flex;
@@ -15,6 +8,7 @@
     background-color: #ececec;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 7px 7px 0 0;
   }
 
   &-body {
@@ -93,6 +87,7 @@ textarea.ng-touched.ng-invalid {
 @media (max-width: 900px) {
   .chat {
     width: 100%;
+
     &-header {
       & img {
         width: 100%;

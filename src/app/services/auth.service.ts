@@ -1,13 +1,12 @@
-import {BehaviorSubject, Observable} from "rxjs";
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {Response} from "../interfaces/Response";
-import {Router} from "@angular/router";
-import {UserService} from "./user.service";
-import {WebSocketService} from "./web-socket.service";
-import {environment} from "../../environments/environment";
-import * as jwt_decode from "jwt-decode";
-import {map, switchMap} from "rxjs/operators";
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Response} from '../interfaces/Response';
+import {Router} from '@angular/router';
+import {UserService} from './user.service';
+import {WebSocketService} from './web-socket.service';
+import {environment} from '../../environments/environment';
+
 
 @Injectable({providedIn: 'root'})
 
@@ -18,7 +17,8 @@ export class AuthService {
   constructor(private router: Router,
               private http: HttpClient,
               private userService: UserService,
-              private webSocketService: WebSocketService) {}
+              private webSocketService: WebSocketService) {
+  }
 
   public register(data): Observable<any> {
     return this.http.post(environment.SERVER_URL_REG, data);
@@ -50,12 +50,12 @@ export class AuthService {
   public checkSession(): Promise<any> {
     return new Promise<any>(res => {
       this.http.get(environment.SERVER_URL_CHECK_SESSION).subscribe((data: Response) => {
-        if(data.ok) {
+        if (data.ok) {
           this.initUser(data);
         }
         res(data.ok);
       });
-    })
+    });
   }
 
   // public refreshToken(): Observable<any> {
@@ -67,7 +67,7 @@ export class AuthService {
 
   login(value): Promise<Response> {
     return new Promise<Response>(res => {
-      this.http.post(environment.SERVER_URL_LOGIN, value).subscribe((data:Response) => {
+      this.http.post(environment.SERVER_URL_LOGIN, value).subscribe((data: Response) => {
         if (data.ok) {
           this.initUser(data);
           // localStorage.setItem('refreshToken', data.refreshToken);
@@ -77,19 +77,18 @@ export class AuthService {
         res({
           ok: false,
           caption: 'Сервер временно недоступен!'
-        })
+        });
       });
-    })
+    });
   }
 
   logout(): void {
-    this.http.get(environment.SERVER_URL_LOGOUT).subscribe((data:Response) => {
-      if(data.ok) {
+    this.http.get(environment.SERVER_URL_LOGOUT).subscribe((data: Response) => {
+      if (data.ok) {
         this.webSocketService.disconnectSocket();
         this.status.next(false);
         this.router.navigate(['/login']);
-      }
-      else {
+      } else {
         console.log(data.caption);
       }
     });

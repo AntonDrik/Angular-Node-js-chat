@@ -1,16 +1,17 @@
-import { Injectable }   from '@angular/core';
-import {HttpClient}     from "@angular/common/http";
-import {User}           from "../interfaces/User";
-import {Response}       from "../interfaces/Response";
-import {environment}    from "../../environments/environment";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {User} from '../interfaces/User';
+import {Response} from '../interfaces/Response';
+import {environment} from '../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class UserService {
 
-  currentUser:User;
+  currentUser: User;
   accessToken: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getUser(userID): Promise<User> {
     const URL = `${environment.SERVER_URL_USER_GET}/${userID}`;
@@ -18,7 +19,7 @@ export class UserService {
       this.http.get(URL).subscribe((data: Response) => {
         (data.ok) ? res(data.user) : rej(data.caption);
       }, error => {
-        rej(error)
+        rej(error);
       });
     });
   }
@@ -30,14 +31,13 @@ export class UserService {
         if (data.ok) {
           this.currentUser = data.user;
           res(data);
-        }
-        else {
+        } else {
           rej(data);
         }
       }, error => {
         rej(error);
-      })
-    })
+      });
+    });
   }
 
 }

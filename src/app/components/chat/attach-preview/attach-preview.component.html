@@ -1,0 +1,10 @@
+<div *ngIf="src" class="preview">
+  <img class="preview-img" [src]="src"/>
+  <img
+    class="preview-close"
+    src="assets/images/close.png"
+    (click)="handleClear()"
+    alt=""
+  >
+</div>
+

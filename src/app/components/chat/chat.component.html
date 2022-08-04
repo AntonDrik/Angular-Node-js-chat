@@ -1,27 +1,28 @@
-<div class="container">
-  <div class="chat">
-    <div class="chat-header">
-      <div class="online-box">
-        <div class="online-header"><strong>Online</strong></div>
-        <ul class="list online-list">
-          <li class="online-user" *ngFor="let user of users">
-            <strong>{{ user }}</strong>
-          </li>
-        </ul>
-      </div>
-      <user-box [user]="currUser"></user-box>
+<div class="chat">
+  <div class="chat-header">
+    <div class="online-box">
+      <div class="online-header"><strong>Online</strong></div>
+      <ul class="list online-list">
+        <li class="online-user" *ngFor="let user of users">
+          <strong>{{ user }}</strong>
+        </li>
+      </ul>
     </div>
-    <div class="chat-body">
-      <div class="chat-content" #mbox>
-        <app-message [message]="message" *ngFor="let message of messages"></app-message>
-      </div>
-      <div class="chat-controls">
-        <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
-          <app-file-upload formControlName="file"></app-file-upload>
-          <textarea type="text" formControlName="text" (keyup)="handleChange($event)"></textarea>
-          <button class="btn" type="submit">Send</button>
-        </form>
-      </div>
+    <user-box [user]="currUser"></user-box>
+  </div>
+  <div class="chat-body">
+    <div class="chat-content" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+      <app-message [message]="message" *ngFor="let message of messages"></app-message>
+    </div>
+    <div class="chat-controls">
+      <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
+        <app-attach-file formControlName="file"></app-attach-file>
+        <textarea #areaElement type="text" formControlName="text" (keyup)="handleChange($event)"></textarea>
+        <button class="btn" type="submit">Send</button>
+        <app-spinner *ngIf="sendLoading"></app-spinner>
+      </form>
+
+      <app-attach-preview></app-attach-preview>
     </div>
   </div>
 </div>

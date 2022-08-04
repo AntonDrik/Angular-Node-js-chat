@@ -15,7 +15,7 @@ const storageConfig = multer.diskStorage({
 
 
 exports.getMessage = function (req, res) {
-  Message.find({}).sort({_id: -1}).limit(50).exec(function (err, item) {
+  Message.find({}).sort({_id: -1}).limit(150).exec(function (err, item) {
     if (err) return console.log(err);
     res.send(item);
   });
