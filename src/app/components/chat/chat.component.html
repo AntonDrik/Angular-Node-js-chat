@@ -13,10 +13,11 @@
     </div>
     <div class="chat-body">
       <div class="chat-content" #mbox>
-        <message [message]="message" *ngFor="let message of messages"></message>
+        <app-message [message]="message" *ngFor="let message of messages"></app-message>
       </div>
       <div class="chat-controls">
         <form class="chat-form" [formGroup]="chatForm" (submit)="sendMessage()">
+          <app-file-upload formControlName="file"></app-file-upload>
           <textarea type="text" formControlName="text" (keyup)="handleChange($event)"></textarea>
           <button class="btn" type="submit">Send</button>
         </form>

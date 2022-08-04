@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../interfaces/User';
 import {Message} from '../../interfaces/Message';
@@ -15,7 +15,7 @@ import {Howl} from 'howler';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit {
 
   @ViewChild('mbox', {static: false}) private mbox: ElementRef;
 
@@ -58,7 +58,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.webSocketService.onMessage().subscribe((message: Message) => {
       this.sound.play();
       this.messages.push(message);
-      this.scrollToBottom();
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
     });
 
     this.webSocketService.onOnlineUsers().subscribe(users => {
@@ -75,29 +77,37 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   loadMessages() {
     this.http.get(environment.SERVER_URL_MESSAGES_GET).subscribe((data: []) => {
       this.messages = data.reverse();
-      this.scrollToBottom();
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 500);
     });
   }
 
   initForm() {
     this.chatForm = this.fb.group({
-      text: ['', [Validators.required]]
+      text: ['', [Validators.required]],
+      file: []
     });
   }
 
   sendMessage() {
+    console.log(this.chatForm.value);
     const currUser = this.userService.currentUser;
     const controls = this.chatForm.controls;
     if (this.chatForm.invalid) {
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
       return;
     }
-    this.webSocketService.send({
-      userID: currUser.userID,
-      nick: currUser.nick,
-      text: this.chatForm.value.text
-    });
-    this.chatForm.reset();
+
+    const formData = new FormData();
+    formData.append('userID', currUser.userID);
+    formData.append('nick', currUser.nick);
+    formData.append('text', this.chatForm.value.text);
+    formData.append('file', this.chatForm.value.file);
+    this.http.post(environment.SERVER_URL_MESSAGES_ADD, formData)
+      .subscribe(() => {
+        this.chatForm.reset();
+      });
   }
 
   handleChange(event: KeyboardEvent) {
@@ -108,10 +118,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       event.preventDefault();
       this.sendMessage();
     }
-  }
-
-  ngAfterViewChecked() {
-    this.scrollToBottom();
   }
 
   public scrollToBottom(): void {

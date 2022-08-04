@@ -17,10 +17,12 @@ export class UserProfileComponent implements OnInit {
   userProfileForm: FormGroup;
   serverRes: Response;
 
-  constructor(public dialogRef: MatDialogRef<UserProfileComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              private formBuilder: FormBuilder,
-              private userService: UserService) {
+  constructor(
+    public dialogRef: MatDialogRef<UserProfileComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private formBuilder: FormBuilder,
+    private userService: UserService
+  ) {
     this.user = data.user;
     this.isEditable = data.isEditable;
   }

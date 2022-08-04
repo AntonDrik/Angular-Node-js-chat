@@ -1,15 +1,15 @@
-const express           = require('express');
-const mongoose          = require('mongoose');
-const bodyParser        = require('body-parser');
-const cors              = require('cors');
-const routes            = require('./routes');
-let http                = require('http');
-const SocketIO          = require('./sockets/root');
-const session           = require('express-session');
-const cookieParser      = require('cookie-parser');
-const MongoStore        = require('connect-mongo')(session);
-const config            = require('./config');
-const path              = require('path');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const routes = require('./routes');
+let http = require('http');
+const SocketIO = require('./sockets/root');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const MongoStore = require('connect-mongo')(session);
+const config = require('./config');
+const path = require('path');
 
 //Database
 mongoose.Promise = global.Promise;
@@ -23,15 +23,18 @@ mongoose.connection
   });
 
 mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
-  .then((res) => {
-    //app
+  .then(() => {
+
     const app = express();
 
     app.use(cors({credentials: true}));
     app.use(bodyParser.json());
     app.use(cookieParser(config.COOKIE_SECRET));
-    app.use(express.urlencoded({ extended: true}));
+    app.use(express.urlencoded({extended: true}));
+
     app.use(express.static(__dirname + '/dist/chat'));
+    app.use('/static', express.static('chat-files'));
+
     app.use(session({
       name: config.COOKIE_NAME,
       secret: config.COOKIE_SECRET,
@@ -42,10 +45,11 @@ mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
         mongooseConnection: mongoose.connection
       })
     }));
+
     app.use('/auth', routes.auth);
     app.use('/api', routes.api);
-    app.get('/*', function(req,res) {
-      res.sendFile(path.join(__dirname+'/dist/chat/index.html'));
+    app.get('/*', function (req, res) {
+      res.sendFile(path.join(__dirname + '/dist/chat/index.html'));
     });
 
     //init socket
@@ -53,9 +57,7 @@ mongoose.connect(config.MONGO_URL, config.MONGO_CONFIG)
     SocketIO.initSocket(server);
     SocketIO.addListeners();
     server.listen(config.PORT, () => {
-      console.log('Server started at port: '+ config.PORT);
+      console.log('Server started at port: ' + config.PORT);
     });
   })
   .catch((e) => console.log(e));
-// io.path('/chat');
-// const publicRoom = io.of('/chat');

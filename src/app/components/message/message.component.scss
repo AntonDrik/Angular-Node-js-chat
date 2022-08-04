@@ -1,9 +1,18 @@
 .message {
   display: flex;
-  width: auto;
+  width: fit-content;
+  max-width: 80%;
   height: auto;
-  padding: 5px 15px;
+  padding: 5px 10px;
   position: relative;
+  border-radius: .50rem;
+  margin: 10px;
+  cursor: pointer;
+  background-color: #d9e3d0;
+
+  &:hover {
+    background-color: #bdd1ad;
+  }
 
   &-action {
     text-align: center;
@@ -49,5 +58,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  &-img {
+    width: 100%;
+    border-radius: .50rem;
+    box-shadow: 0 0 2px #000000;
   }
 }

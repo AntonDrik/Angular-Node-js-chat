@@ -1,9 +1,10 @@
 <div class="message">
   <div class="message-info">
     <span class="message-time"> {{ message.date | date:'h:mm' }}</span>
-    <span class="message-name" (click)="showProfile(message.userID)">
-      {{ message.nick }}:
-    </span>
+    <span class="message-name">{{ message.nick }}:</span>
   </div>
-  <p class="message-text" [innerHTML]="message.text"></p>
+  <div>
+    <p class="message-text" [innerHTML]="message.text"></p>
+    <img class="message-img" *ngIf="message.filePath" src="{{'static/' + message.filePath}}" alt="">
+  </div>
 </div>

@@ -18,7 +18,7 @@
   }
 
   &-body {
-    height: calc(100% - 115px);
+    height: calc(100% - 73px);
     display: flex;
     flex-direction: column;
   }
@@ -27,9 +27,7 @@
     position: relative;
 
     & textarea {
-      padding-left: 10px;
-      padding-top: 12px;
-      padding-right: 55px;
+      padding: 13px 105px 0 45px;
       border: none;
       outline: none;
       box-sizing: border-box;
